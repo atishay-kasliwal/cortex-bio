@@ -2,7 +2,15 @@ import { SiteHeader } from "@/components/marketing/site-header";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import type { ReactNode } from "react";
 
-export function LegalShell({ title, updated, children }: { title: string; updated: string; children: ReactNode }) {
+export function LegalShell({
+  title,
+  updated,
+  children,
+}: {
+  title: string;
+  updated: string;
+  children: ReactNode;
+}) {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />

@@ -1,13 +1,31 @@
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Gauge, LineChart, Clock, Sparkles, KeyRound, Settings, BookOpen, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  Gauge,
+  LineChart,
+  Clock,
+  Sparkles,
+  KeyRound,
+  Settings,
+  BookOpen,
+  LogOut,
+} from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
-  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/brand/logo";
 
@@ -40,7 +58,9 @@ export function AppSidebar() {
         name: meta.full_name ?? meta.name ?? data.user.email?.split("@")[0] ?? "Account",
       });
     });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
 
   const initials = (me?.name ?? "?")
@@ -65,7 +85,9 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-3 py-4">
-        <Link to="/" className="flex items-center"><Logo /></Link>
+        <Link to="/" className="flex items-center">
+          <Logo />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -105,12 +127,20 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border p-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[var(--brand-glow)] text-xs font-semibold text-white">{initials}</div>
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[var(--brand-glow)] text-xs font-semibold text-white">
+            {initials}
+          </div>
           <div className="min-w-0 flex-1 text-sm">
             <div className="truncate font-medium">{me?.name ?? "—"}</div>
             <div className="truncate text-xs text-muted-foreground">{me?.email ?? ""}</div>
           </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground" onClick={signOut} aria-label="Sign out">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+            onClick={signOut}
+            aria-label="Sign out"
+          >
             <LogOut className="h-4 w-4" />
           </Button>
         </div>

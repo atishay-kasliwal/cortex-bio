@@ -23,10 +23,14 @@ function DashboardLayout() {
                 placeholder="Jump to anything…"
                 className="h-9 w-full rounded-md border border-border bg-card pl-9 pr-16 text-sm outline-none placeholder:text-muted-foreground/70 focus:ring-1 focus:ring-ring"
               />
-              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">⌘K</kbd>
+              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                ⌘K
+              </kbd>
             </div>
             <div className="ml-auto flex items-center gap-1.5">
-              <Button variant="ghost" size="icon" className="h-9 w-9"><Bell className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Bell className="h-4 w-4" />
+              </Button>
             </div>
           </header>
           <main className="flex-1 p-6 md:p-8">

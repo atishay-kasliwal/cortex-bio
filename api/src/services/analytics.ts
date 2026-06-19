@@ -3,6 +3,8 @@ import { DateTime } from 'luxon';
 import { prisma } from '../lib/prisma.js';
 import { InsightType } from '@cortex-bio/db';
 
+import { toInputJson } from '../lib/json.js';
+
 export const MIN_CORRELATION_DAYS = 14;
 export const MIN_HOUR_SAMPLES = 8;
 export const MIN_QUARTILE_SAMPLES = 6;
@@ -485,7 +487,7 @@ export async function persistInsights(
       impactPct: insight.impactPct,
       confidence: insight.confidence,
       validFrom,
-      metadata: insight.metadata,
+      metadata: toInputJson(insight.metadata),
     })),
   });
 

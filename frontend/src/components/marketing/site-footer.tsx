@@ -11,9 +11,30 @@ export function SiteFooter() {
             Wearable intelligence for people who treat performance as a craft.
           </p>
         </div>
-        <FooterCol title="Product" links={[["Features", "#features"], ["How it works", "#how"], ["Pricing", "#pricing"]]} />
-        <FooterCol title="Developers" links={[["Documentation", "/docs"], ["API reference", "/docs"], ["Status", "#"]]} />
-        <FooterCol title="Company" links={[["About", "#"], ["Privacy", "#"], ["Terms", "#"]]} />
+        <FooterCol
+          title="Product"
+          links={[
+            ["Features", "#features"],
+            ["How it works", "#how"],
+            ["Pricing", "#pricing"],
+          ]}
+        />
+        <FooterCol
+          title="Developers"
+          links={[
+            ["Documentation", "/docs"],
+            ["API reference", "/docs"],
+            ["Status", "#"],
+          ]}
+        />
+        <FooterCol
+          title="Company"
+          links={[
+            ["About", "#"],
+            ["Privacy", "#"],
+            ["Terms", "#"],
+          ]}
+        />
       </div>
       <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 text-xs text-muted-foreground">
@@ -33,9 +54,13 @@ function FooterCol({ title, links }: { title: string; links: [string, string][] 
         {links.map(([label, href]) => (
           <li key={label}>
             {href.startsWith("/") ? (
-              <Link to={href} className="hover:text-foreground transition">{label}</Link>
+              <Link to={href} className="hover:text-foreground transition">
+                {label}
+              </Link>
             ) : (
-              <a href={href} className="hover:text-foreground transition">{label}</a>
+              <a href={href} className="hover:text-foreground transition">
+                {label}
+              </a>
             )}
           </li>
         ))}

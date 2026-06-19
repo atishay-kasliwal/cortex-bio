@@ -1,7 +1,21 @@
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
-export function StatCard({ label, value, delta, hint, children, className }: { label: string; value: string; delta?: string; hint?: string; children?: ReactNode; className?: string }) {
+export function StatCard({
+  label,
+  value,
+  delta,
+  hint,
+  children,
+  className,
+}: {
+  label: string;
+  value: string;
+  delta?: string;
+  hint?: string;
+  children?: ReactNode;
+  className?: string;
+}) {
   return (
     <div className={cn("rounded-xl border border-border bg-card p-5", className)}>
       <div className="flex items-center justify-between">

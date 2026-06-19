@@ -24,9 +24,7 @@ export function toHrvTrend(
   }));
 }
 
-export function toWeeklyPerformance(
-  history: { date: string; readiness_score: number }[],
-) {
+export function toWeeklyPerformance(history: { date: string; readiness_score: number }[]) {
   return history.map((h) => ({
     day: new Date(h.date + "T12:00:00").toLocaleDateString([], { weekday: "short" }),
     deep: Math.round((h.readiness_score / 100) * 6 * 10) / 10,
@@ -122,12 +120,14 @@ export function readinessLabel(score: number): string {
 
 export function readinessComponents(readiness: ReadinessToday) {
   const df = readiness.daily_features;
-  const hrvScore = df.hrv_vs_baseline_pct != null
-    ? Math.min(100, Math.max(0, 50 + df.hrv_vs_baseline_pct))
-    : df.avg_hrv != null ? 70 : 50;
-  const sleepScore = df.sleep_duration != null
-    ? Math.min(100, Math.round((df.sleep_duration / 8) * 100))
-    : 50;
+  const hrvScore =
+    df.hrv_vs_baseline_pct != null
+      ? Math.min(100, Math.max(0, 50 + df.hrv_vs_baseline_pct))
+      : df.avg_hrv != null
+        ? 70
+        : 50;
+  const sleepScore =
+    df.sleep_duration != null ? Math.min(100, Math.round((df.sleep_duration / 8) * 100)) : 50;
 
   return [
     { name: "Recovery", value: Math.round(readiness.readiness_score * 0.9) },

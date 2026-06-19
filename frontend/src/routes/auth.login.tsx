@@ -24,14 +24,21 @@ function LoginPage() {
   const navigate = useNavigate();
   const { redirect } = useSearch({ from: "/auth/login" });
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
 
   const onSubmit = async (values: LoginInput) => {
     setSubmitting(true);
-    const { error } = await supabase.auth.signInWithPassword({ email: values.email, password: values.password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
     setSubmitting(false);
     if (error) {
       toast.error(error.message);
@@ -42,7 +49,9 @@ function LoginPage() {
   };
 
   const signInWithGoogle = async () => {
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+    const res = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/dashboard",
+    });
     if (res.error) toast.error(res.error.message);
   };
 
@@ -50,7 +59,14 @@ function LoginPage() {
     <AuthCard
       title="Welcome back"
       subtitle="Sign in to your Atriveo Bio account."
-      footer={<>Don't have an account? <Link to="/auth/signup" className="text-foreground hover:underline">Create one</Link></>}
+      footer={
+        <>
+          Don't have an account?{" "}
+          <Link to="/auth/signup" className="text-foreground hover:underline">
+            Create one
+          </Link>
+        </>
+      }
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <Button type="button" variant="outline" className="w-full h-10" onClick={signInWithGoogle}>
@@ -62,18 +78,39 @@ function LoginPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" autoComplete="email" placeholder="you@company.com" {...register("email")} />
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@company.com"
+            {...register("email")}
+          />
           <FieldError msg={errors.email?.message} />
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link to="/auth/forgot-password" className="text-xs text-muted-foreground hover:text-foreground">Forgot?</Link>
+            <Link
+              to="/auth/forgot-password"
+              className="text-xs text-muted-foreground hover:text-foreground"
+            >
+              Forgot?
+            </Link>
           </div>
-          <Input id="password" type="password" autoComplete="current-password" placeholder="••••••••" {...register("password")} />
+          <Input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="••••••••"
+            {...register("password")}
+          />
           <FieldError msg={errors.password?.message} />
         </div>
-        <Button type="submit" disabled={submitting} className="w-full bg-foreground text-background hover:bg-foreground/90 h-10">
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full bg-foreground text-background hover:bg-foreground/90 h-10"
+        >
           {submitting ? "Signing in…" : "Sign in"}
         </Button>
       </form>

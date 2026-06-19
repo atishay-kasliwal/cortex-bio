@@ -18,8 +18,13 @@ export const Route = createFileRoute("/auth/reset-password")({
 function ResetPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<ResetInput>({
-    resolver: zodResolver(resetSchema), defaultValues: { password: "", confirm: "" },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetInput>({
+    resolver: zodResolver(resetSchema),
+    defaultValues: { password: "", confirm: "" },
   });
   const onSubmit = async (values: ResetInput) => {
     setSubmitting(true);
@@ -30,19 +35,36 @@ function ResetPage() {
     navigate({ to: "/dashboard" });
   };
   return (
-    <AuthCard title="Set a new password" subtitle="Choose a strong password — at least 8 characters.">
+    <AuthCard
+      title="Set a new password"
+      subtitle="Choose a strong password — at least 8 characters."
+    >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <Label htmlFor="password">New password</Label>
-          <Input id="password" type="password" autoComplete="new-password" {...register("password")} />
+          <Input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            {...register("password")}
+          />
           <FieldError msg={errors.password?.message} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="confirm">Confirm password</Label>
-          <Input id="confirm" type="password" autoComplete="new-password" {...register("confirm")} />
+          <Input
+            id="confirm"
+            type="password"
+            autoComplete="new-password"
+            {...register("confirm")}
+          />
           <FieldError msg={errors.confirm?.message} />
         </div>
-        <Button type="submit" disabled={submitting} className="w-full bg-foreground text-background hover:bg-foreground/90 h-10">
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full bg-foreground text-background hover:bg-foreground/90 h-10"
+        >
           {submitting ? "Updating…" : "Update password"}
         </Button>
       </form>

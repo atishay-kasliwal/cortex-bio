@@ -280,10 +280,10 @@ export async function computeHourlyFeatures(
     });
 
     const hrValues = samples
-      .filter((s) =>
-        [METRIC_TYPES.HEART_RATE, METRIC_TYPES.RESTING_HEART_RATE].includes(
-          s.metricType,
-        ),
+      .filter(
+        (s) =>
+          s.metricType === METRIC_TYPES.HEART_RATE ||
+          s.metricType === METRIC_TYPES.RESTING_HEART_RATE,
       )
       .map((s) => s.value);
     const hrvValues = samples

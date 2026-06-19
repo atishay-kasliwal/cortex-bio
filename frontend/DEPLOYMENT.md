@@ -49,22 +49,22 @@ cd cortex-bio/db && npm run db:migrate && npm run db:generate
 
 ### Environment variables (Production)
 
-| Variable | Value |
-|----------|-------|
-| `VITE_API_URL` | `https://api.cortex.bio` |
-| `VITE_DOCS_API_URL` | `https://api.cortex.bio` |
-| `VITE_SUPABASE_URL` | Your Supabase URL |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key |
-| `NODE_VERSION` | `20` |
+| Variable                        | Value                    |
+| ------------------------------- | ------------------------ |
+| `VITE_API_URL`                  | `https://api.cortex.bio` |
+| `VITE_DOCS_API_URL`             | `https://api.cortex.bio` |
+| `VITE_SUPABASE_URL`             | Your Supabase URL        |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key        |
+| `NODE_VERSION`                  | `20`                     |
 
 Duplicate vars for **Preview** environment; use preview Supabase if needed.
 
 ### Custom domains
 
-| Environment | Domain |
-|-------------|--------|
-| Production | `bio.atriveo.com` |
-| Preview | `preview.bio.atriveo.com` |
+| Environment | Domain                    |
+| ----------- | ------------------------- |
+| Production  | `bio.atriveo.com`         |
+| Preview     | `preview.bio.atriveo.com` |
 
 DNS (Cloudflare):
 

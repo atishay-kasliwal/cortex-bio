@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 
 import { prisma } from '../lib/prisma.js';
+import { toInputJson } from '../lib/json.js';
 import { utcToLocalDateKey } from '../lib/timezone.js';
 import type { SyncPayload } from '../schemas/sync.js';
 import {
@@ -85,7 +86,7 @@ export async function ingestHealthData(
         endTime: s.endTime,
         sourceDevice: s.sourceDevice,
         sourceApp: s.sourceApp,
-        metadata: s.metadata,
+        metadata: toInputJson(s.metadata),
       })),
     });
   }
@@ -129,7 +130,7 @@ export async function ingestHealthData(
         awakeMinutes,
         sleepEfficiency,
         sourceDevice: raw.source_device ?? raw.source ?? null,
-        metadata: raw.metadata ?? {},
+        metadata: toInputJson(raw.metadata ?? {}),
       },
       update: {
         durationMinutes,
@@ -139,7 +140,7 @@ export async function ingestHealthData(
         awakeMinutes,
         sleepEfficiency,
         sourceDevice: raw.source_device ?? raw.source ?? null,
-        metadata: raw.metadata ?? {},
+        metadata: toInputJson(raw.metadata ?? {}),
       },
     });
     sleepSessionsUpserted += 1;
@@ -170,7 +171,7 @@ export async function ingestHealthData(
           avgHeartRate: raw.avg_heart_rate ?? null,
           maxHeartRate: raw.max_heart_rate ?? null,
           sourceDevice: raw.source_device ?? raw.source ?? null,
-          metadata: raw.metadata ?? {},
+          metadata: toInputJson(raw.metadata ?? {}),
         },
       });
     } else {
@@ -185,7 +186,7 @@ export async function ingestHealthData(
           avgHeartRate: raw.avg_heart_rate ?? null,
           maxHeartRate: raw.max_heart_rate ?? null,
           sourceDevice: raw.source_device ?? raw.source ?? null,
-          metadata: raw.metadata ?? {},
+          metadata: toInputJson(raw.metadata ?? {}),
         },
       });
     }

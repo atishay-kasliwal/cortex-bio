@@ -10,7 +10,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Atriveo Bio — Know when you'll perform at your best" },
-      { name: "description", content: "Transform wearable data into cognitive forecasts, deep work windows, and performance insights." },
+      {
+        name: "description",
+        content:
+          "Transform wearable data into cognitive forecasts, deep work windows, and performance insights.",
+      },
       { property: "og:title", content: "Atriveo Bio" },
       { property: "og:description", content: "Wearable intelligence for peak human performance." },
     ],
@@ -42,24 +46,41 @@ function Hero() {
       <div className="absolute inset-x-0 top-0 h-[600px] bg-radial-fade" />
       <div className="relative mx-auto max-w-7xl px-6 pt-24 pb-28 md:pt-32 md:pb-36">
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <a href="#features" className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur transition hover:text-foreground">
+          <a
+            href="#features"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur transition hover:text-foreground"
+          >
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand)] shadow-[0_0_8px_var(--brand)]" />
             Cortex telemetry is now live
             <ArrowRight className="h-3 w-3" />
           </a>
           <h1 className="text-balance text-5xl font-semibold tracking-[-0.04em] md:text-7xl">
-            <span className="text-gradient">Know when you'll<br />perform at your best.</span>
+            <span className="text-gradient">
+              Know when you'll
+              <br />
+              perform at your best.
+            </span>
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-base text-muted-foreground md:text-lg">
-            Transform wearable data into cognitive forecasts, deep work windows, and performance insights.
+            Transform wearable data into cognitive forecasts, deep work windows, and performance
+            insights.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild size="lg" className="bg-foreground text-background hover:bg-foreground/90 h-11 px-6">
+            <Button
+              asChild
+              size="lg"
+              className="bg-foreground text-background hover:bg-foreground/90 h-11 px-6"
+            >
               <Link to="/auth/signup">
                 Get Started <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-11 px-6 bg-background/50 backdrop-blur">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-11 px-6 bg-background/50 backdrop-blur"
+            >
               <Link to="/docs">View API Docs</Link>
             </Button>
           </div>
@@ -82,7 +103,9 @@ function HeroPreview() {
             <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
             <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
           </div>
-          <span className="ml-3 font-mono text-xs text-muted-foreground">bio.atriveo.com/dashboard</span>
+          <span className="ml-3 font-mono text-xs text-muted-foreground">
+            bio.atriveo.com/dashboard
+          </span>
         </div>
         <div className="grid gap-px bg-border md:grid-cols-3">
           <PreviewStat label="Readiness" value="86" delta="+4" hint="Today" />
@@ -97,7 +120,17 @@ function HeroPreview() {
   );
 }
 
-function PreviewStat({ label, value, delta, hint }: { label: string; value: string; delta: string; hint: string }) {
+function PreviewStat({
+  label,
+  value,
+  delta,
+  hint,
+}: {
+  label: string;
+  value: string;
+  delta: string;
+  hint: string;
+}) {
   return (
     <div className="bg-card p-6">
       <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
@@ -117,7 +150,9 @@ function PreviewCurve() {
     const afternoon = Math.exp(-((x - 0.68) ** 2) * 30) * 0.65;
     return { x, y: Math.max(morning, afternoon, 0.25) };
   });
-  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${(p.x * 100).toFixed(2)},${(100 - p.y * 90).toFixed(2)}`).join(" ");
+  const path = points
+    .map((p, i) => `${i === 0 ? "M" : "L"}${(p.x * 100).toFixed(2)},${(100 - p.y * 90).toFixed(2)}`)
+    .join(" ");
   const area = `${path} L100,100 L0,100 Z`;
   return (
     <div>
@@ -133,10 +168,20 @@ function PreviewCurve() {
           </linearGradient>
         </defs>
         <path d={area} fill="url(#curveFill)" />
-        <path d={path} fill="none" stroke="var(--brand)" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
+        <path
+          d={path}
+          fill="none"
+          stroke="var(--brand)"
+          strokeWidth="0.6"
+          vectorEffect="non-scaling-stroke"
+        />
       </svg>
       <div className="mt-1 flex justify-between font-mono text-[10px] text-muted-foreground">
-        <span>00</span><span>06</span><span>12</span><span>18</span><span>24</span>
+        <span>00</span>
+        <span>06</span>
+        <span>12</span>
+        <span>18</span>
+        <span>24</span>
       </div>
     </div>
   );
@@ -151,7 +196,10 @@ function Trust() {
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
           {wearables.map((w) => (
-            <span key={w.id} className="text-base font-medium text-muted-foreground/80 transition hover:text-foreground">
+            <span
+              key={w.id}
+              className="text-base font-medium text-muted-foreground/80 transition hover:text-foreground"
+            >
               {w.name}
             </span>
           ))}
@@ -165,12 +213,15 @@ function Features() {
   return (
     <section id="features" className="mx-auto max-w-7xl px-6 py-28">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand)]">Platform</p>
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand)]">
+          Platform
+        </p>
         <h2 className="mt-3 text-balance text-4xl font-semibold tracking-tight md:text-5xl">
           Biometric intelligence, end to end.
         </h2>
         <p className="mt-4 text-muted-foreground">
-          Six tightly-integrated layers that turn passive sensor data into decisions you act on every morning.
+          Six tightly-integrated layers that turn passive sensor data into decisions you act on
+          every morning.
         </p>
       </div>
       <div className="mt-16 grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
@@ -196,7 +247,9 @@ function HowItWorks() {
     <section id="how" className="border-t border-border/60 bg-muted/20">
       <div className="mx-auto max-w-7xl px-6 py-28">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand)]">Pipeline</p>
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand)]">
+            Pipeline
+          </p>
           <h2 className="mt-3 text-balance text-4xl font-semibold tracking-tight md:text-5xl">
             From raw signal to scheduled action.
           </h2>
@@ -220,20 +273,62 @@ function HowItWorks() {
 
 function Pricing() {
   const tiers = [
-    { name: "Individual", price: "$0", desc: "For one athlete-operator. All core forecasts.", features: ["Connect 2 wearables", "Daily readiness score", "Peak window forecasts", "Community support"], cta: "Start free" },
-    { name: "Pro", price: "$24", suffix: "/mo", desc: "Full chronotype + deep work intelligence.", features: ["Unlimited wearables", "Cognitive readiness API", "Chronotype reports", "Webhooks & integrations", "Priority support"], cta: "Start Pro trial", featured: true },
-    { name: "Team", price: "Custom", desc: "For high-performance teams and labs.", features: ["SSO + audit logs", "Cohort analytics", "Custom models", "SLA & dedicated CSM"], cta: "Talk to us" },
+    {
+      name: "Individual",
+      price: "$0",
+      desc: "For one athlete-operator. All core forecasts.",
+      features: [
+        "Connect 2 wearables",
+        "Daily readiness score",
+        "Peak window forecasts",
+        "Community support",
+      ],
+      cta: "Start free",
+    },
+    {
+      name: "Pro",
+      price: "$24",
+      suffix: "/mo",
+      desc: "Full chronotype + deep work intelligence.",
+      features: [
+        "Unlimited wearables",
+        "Cognitive readiness API",
+        "Chronotype reports",
+        "Webhooks & integrations",
+        "Priority support",
+      ],
+      cta: "Start Pro trial",
+      featured: true,
+    },
+    {
+      name: "Team",
+      price: "Custom",
+      desc: "For high-performance teams and labs.",
+      features: ["SSO + audit logs", "Cohort analytics", "Custom models", "SLA & dedicated CSM"],
+      cta: "Talk to us",
+    },
   ];
   return (
     <section id="pricing" className="mx-auto max-w-7xl px-6 py-28">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand)]">Pricing</p>
-        <h2 className="mt-3 text-balance text-4xl font-semibold tracking-tight md:text-5xl">Built for individuals. Priced for teams.</h2>
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--brand)]">
+          Pricing
+        </p>
+        <h2 className="mt-3 text-balance text-4xl font-semibold tracking-tight md:text-5xl">
+          Built for individuals. Priced for teams.
+        </h2>
       </div>
       <div className="mt-14 grid gap-6 md:grid-cols-3">
         {tiers.map((t) => (
-          <div key={t.name} className={`relative rounded-2xl border bg-card p-7 ${t.featured ? "border-[var(--brand)]/50 glow-ring" : "border-border"}`}>
-            {t.featured && <span className="absolute -top-2.5 left-7 rounded-full bg-[var(--brand)] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--brand-foreground)]">Popular</span>}
+          <div
+            key={t.name}
+            className={`relative rounded-2xl border bg-card p-7 ${t.featured ? "border-[var(--brand)]/50 glow-ring" : "border-border"}`}
+          >
+            {t.featured && (
+              <span className="absolute -top-2.5 left-7 rounded-full bg-[var(--brand)] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--brand-foreground)]">
+                Popular
+              </span>
+            )}
             <h3 className="text-sm font-medium text-muted-foreground">{t.name}</h3>
             <div className="mt-3 flex items-baseline gap-1">
               <span className="text-4xl font-semibold tracking-tight">{t.price}</span>
@@ -247,7 +342,10 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <Button asChild className={`mt-7 w-full ${t.featured ? "bg-[var(--brand)] text-[var(--brand-foreground)] hover:bg-[var(--brand)]/90" : "bg-foreground text-background hover:bg-foreground/90"}`}>
+            <Button
+              asChild
+              className={`mt-7 w-full ${t.featured ? "bg-[var(--brand)] text-[var(--brand-foreground)] hover:bg-[var(--brand)]/90" : "bg-foreground text-background hover:bg-foreground/90"}`}
+            >
               <Link to="/auth/signup">{t.cta}</Link>
             </Button>
           </div>
@@ -265,10 +363,18 @@ function CTA() {
         <h2 className="text-balance text-4xl font-semibold tracking-tight md:text-5xl">
           Tomorrow's peak window is already forming.
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">Connect your wearables in 90 seconds. We'll have your first forecast ready by morning.</p>
+        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          Connect your wearables in 90 seconds. We'll have your first forecast ready by morning.
+        </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg" className="bg-foreground text-background hover:bg-foreground/90 h-11 px-6">
-            <Link to="/auth/signup">Get Started <ArrowRight className="h-4 w-4" /></Link>
+          <Button
+            asChild
+            size="lg"
+            className="bg-foreground text-background hover:bg-foreground/90 h-11 px-6"
+          >
+            <Link to="/auth/signup">
+              Get Started <ArrowRight className="h-4 w-4" />
+            </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-11 px-6">
             <Link to="/docs">View API Docs</Link>

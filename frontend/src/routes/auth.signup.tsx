@@ -19,7 +19,11 @@ export const Route = createFileRoute("/auth/signup")({
 function SignupPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupInput>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupInput>({
     resolver: zodResolver(signupSchema),
     defaultValues: { fullName: "", email: "", password: "" },
   });
@@ -44,7 +48,9 @@ function SignupPage() {
   };
 
   const signInWithGoogle = async () => {
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+    const res = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/dashboard",
+    });
     if (res.error) toast.error(res.error.message);
   };
 
@@ -52,7 +58,14 @@ function SignupPage() {
     <AuthCard
       title="Create your account"
       subtitle="Start forecasting your peak performance today."
-      footer={<>Already have an account? <Link to="/auth/login" className="text-foreground hover:underline">Sign in</Link></>}
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link to="/auth/login" className="text-foreground hover:underline">
+            Sign in
+          </Link>
+        </>
+      }
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <Button type="button" variant="outline" className="w-full h-10" onClick={signInWithGoogle}>
@@ -64,24 +77,53 @@ function SignupPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="fullName">Full name</Label>
-          <Input id="fullName" autoComplete="name" placeholder="Alex Chen" {...register("fullName")} />
+          <Input
+            id="fullName"
+            autoComplete="name"
+            placeholder="Alex Chen"
+            {...register("fullName")}
+          />
           <FieldError msg={errors.fullName?.message} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Work email</Label>
-          <Input id="email" type="email" autoComplete="email" placeholder="you@company.com" {...register("email")} />
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@company.com"
+            {...register("email")}
+          />
           <FieldError msg={errors.email?.message} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" autoComplete="new-password" placeholder="At least 8 characters" {...register("password")} />
+          <Input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="At least 8 characters"
+            {...register("password")}
+          />
           <FieldError msg={errors.password?.message} />
         </div>
-        <Button type="submit" disabled={submitting} className="w-full bg-foreground text-background hover:bg-foreground/90 h-10">
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full bg-foreground text-background hover:bg-foreground/90 h-10"
+        >
           {submitting ? "Creating account…" : "Create account"}
         </Button>
         <p className="text-center text-xs text-muted-foreground">
-          By creating an account, you agree to our <Link to="/terms" className="underline">Terms</Link> and <Link to="/privacy" className="underline">Privacy Policy</Link>.
+          By creating an account, you agree to our{" "}
+          <Link to="/terms" className="underline">
+            Terms
+          </Link>{" "}
+          and{" "}
+          <Link to="/privacy" className="underline">
+            Privacy Policy
+          </Link>
+          .
         </p>
       </form>
     </AuthCard>

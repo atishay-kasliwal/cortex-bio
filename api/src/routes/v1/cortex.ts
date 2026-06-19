@@ -45,7 +45,7 @@ cortexV1
       try {
         const session = await startWorkSession(
           user.id,
-          body.project_name,
+          body.project_name ?? 'General',
           body.notes,
         );
         return c.json({ api_version: 'v1', session }, 201);

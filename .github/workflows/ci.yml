@@ -60,8 +60,8 @@ jobs:
       run:
         working-directory: frontend
     env:
-      VITE_API_URL: https://api.cortex.bio
-      VITE_DOCS_API_URL: https://api.cortex.bio
+      VITE_API_URL: https://api.atriveo.com
+      VITE_DOCS_API_URL: https://api.atriveo.com
       VITE_SUPABASE_URL: https://example.supabase.co
       VITE_SUPABASE_PUBLISHABLE_KEY: ci-placeholder-anon-key
     steps:

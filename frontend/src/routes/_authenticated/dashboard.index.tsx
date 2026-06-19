@@ -3,8 +3,17 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { Button } from "@/components/ui/button";
 import {
-  Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart,
-  ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 import { Moon, Zap } from "lucide-react";
 import { useOverviewData } from "@/lib/api/hooks";
@@ -32,11 +41,25 @@ const tooltipStyle = {
 };
 
 function Overview() {
-  const { profile, readiness, forecast, windows, trends, history, freshness, isLoading, isError, refetch } =
-    useOverviewData();
+  const {
+    profile,
+    readiness,
+    forecast,
+    windows,
+    trends,
+    history,
+    freshness,
+    isLoading,
+    isError,
+    refetch,
+  } = useOverviewData();
 
   const name = profile.data?.full_name?.split(" ")[0] ?? "there";
-  const today = new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+  const today = new Date().toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
   const score = readiness.data?.readiness_score;
   const peak = windows.data?.peak_window;
   const peakLabel = peak ? formatTimeRange(peak.start, peak.end).start : "—";
@@ -48,9 +71,7 @@ function Overview() {
       : [];
 
   const hrvTrend = trends.data ? toHrvTrend(trends.data) : [];
-  const weeklyPerformance = history.data?.history
-    ? toWeeklyPerformance(history.data.history)
-    : [];
+  const weeklyPerformance = history.data?.history ? toWeeklyPerformance(history.data.history) : [];
 
   const sleepHours = readiness.data?.daily_features.sleep_duration;
   const showOnboarding = freshness.data && !freshness.data.onboarding_complete;
@@ -65,7 +86,9 @@ function Overview() {
         <PageHeader title="Overview" description="We couldn't load your biometric data." />
         <div className="rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
           Connect a wearable provider in Settings, then sync data.{" "}
-          <button type="button" className="underline" onClick={() => refetch()}>Retry</button>
+          <button type="button" className="underline" onClick={() => refetch()}>
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -76,16 +99,39 @@ function Overview() {
       <PageHeader
         title={`Good morning, ${name}`}
         description={`${today}${peak ? ` — peak window starts at ${peakLabel}.` : ""}`}
-        actions={<Button className="bg-foreground text-background hover:bg-foreground/90" onClick={() => refetch()}>Sync now</Button>}
+        actions={
+          <Button
+            className="bg-foreground text-background hover:bg-foreground/90"
+            onClick={() => refetch()}
+          >
+            Sync now
+          </Button>
+        }
       />
 
       {showOnboarding && freshness.data ? <OnboardingSteps freshness={freshness.data} /> : null}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Readiness" value={isLoading ? "—" : String(Math.round(score ?? 0))} hint="Cognitive readiness · today" />
-        <StatCard label="Peak Window" value={isLoading ? "—" : peakLabel} hint="Highest forecasted focus" />
-        <StatCard label="Recovery" value={isLoading ? "—" : `${Math.round(score ?? 0)}%`} hint="vs baseline" />
-        <StatCard label="Sleep" value={isLoading ? "—" : formatSleepDuration(sleepHours)} hint="Last night" />
+        <StatCard
+          label="Readiness"
+          value={isLoading ? "—" : String(Math.round(score ?? 0))}
+          hint="Cognitive readiness · today"
+        />
+        <StatCard
+          label="Peak Window"
+          value={isLoading ? "—" : peakLabel}
+          hint="Highest forecasted focus"
+        />
+        <StatCard
+          label="Recovery"
+          value={isLoading ? "—" : `${Math.round(score ?? 0)}%`}
+          hint="vs baseline"
+        />
+        <StatCard
+          label="Sleep"
+          value={isLoading ? "—" : formatSleepDuration(sleepHours)}
+          hint="Last night"
+        />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -93,16 +139,23 @@ function Overview() {
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="font-medium tracking-tight">Performance forecast</h3>
-              <p className="text-xs text-muted-foreground">Hourly cognitive readiness, next 24 hours</p>
+              <p className="text-xs text-muted-foreground">
+                Hourly cognitive readiness, next 24 hours
+              </p>
             </div>
             <Zap className="h-4 w-4 text-[var(--brand)]" />
           </div>
           <div className="h-[260px]">
             {performanceCurve.length === 0 ? (
-              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">No forecast data yet</div>
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                No forecast data yet
+              </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={performanceCurve} margin={{ top: 5, right: 8, left: -16, bottom: 0 }}>
+                <AreaChart
+                  data={performanceCurve}
+                  margin={{ top: 5, right: 8, left: -16, bottom: 0 }}
+                >
                   <defs>
                     <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
                       <stop offset="0%" stopColor="var(--brand)" stopOpacity={0.5} />
@@ -110,10 +163,29 @@ function Overview() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} interval={3} />
-                  <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} />
+                  <XAxis
+                    dataKey="label"
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={3}
+                  />
+                  <YAxis
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    domain={[0, 100]}
+                  />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Area type="monotone" dataKey="score" stroke="var(--brand)" strokeWidth={2} fill="url(#g1)" />
+                  <Area
+                    type="monotone"
+                    dataKey="score"
+                    stroke="var(--brand)"
+                    strokeWidth={2}
+                    fill="url(#g1)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             )}
@@ -126,7 +198,11 @@ function Overview() {
             <Moon className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="space-y-4">
-            <SleepRow label="Total" value={formatSleepDuration(sleepHours)} pct={sleepHours ? Math.min(100, Math.round((sleepHours / 8) * 100)) : 0} />
+            <SleepRow
+              label="Total"
+              value={formatSleepDuration(sleepHours)}
+              pct={sleepHours ? Math.min(100, Math.round((sleepHours / 8) * 100)) : 0}
+            />
             <SleepRow label="Deep" value="—" pct={0} subtle />
             <SleepRow label="REM" value="—" pct={0} subtle />
             <SleepRow label="Awake" value="—" pct={0} subtle />
@@ -142,16 +218,41 @@ function Overview() {
           <h3 className="mb-4 font-medium tracking-tight">HRV trend</h3>
           <div className="h-[220px]">
             {hrvTrend.length === 0 ? (
-              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">No HRV history</div>
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                No HRV history
+              </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={hrvTrend} margin={{ top: 5, right: 8, left: -16, bottom: 0 }}>
                   <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+                  <XAxis
+                    dataKey="day"
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Line type="monotone" dataKey="hrv" stroke="var(--chart-1)" strokeWidth={2} dot={{ r: 3 }} />
-                  <Line type="monotone" dataKey="rhr" stroke="var(--chart-3)" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line
+                    type="monotone"
+                    dataKey="hrv"
+                    stroke="var(--chart-1)"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="rhr"
+                    stroke="var(--chart-3)"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             )}
@@ -161,16 +262,37 @@ function Overview() {
           <h3 className="mb-4 font-medium tracking-tight">Weekly performance</h3>
           <div className="h-[220px]">
             {weeklyPerformance.length === 0 ? (
-              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">No weekly history</div>
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                No weekly history
+              </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={weeklyPerformance} margin={{ top: 5, right: 8, left: -16, bottom: 0 }}>
+                <BarChart
+                  data={weeklyPerformance}
+                  margin={{ top: 5, right: 8, left: -16, bottom: 0 }}
+                >
                   <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+                  <XAxis
+                    dataKey="day"
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <Tooltip contentStyle={tooltipStyle} />
-                  <Bar dataKey="deep" fill="var(--brand)" radius={[4,4,0,0]} />
-                  <Bar dataKey="meetings" fill="var(--muted-foreground)" radius={[4,4,0,0]} opacity={0.4} />
+                  <Bar dataKey="deep" fill="var(--brand)" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="meetings"
+                    fill="var(--muted-foreground)"
+                    radius={[4, 4, 0, 0]}
+                    opacity={0.4}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -181,7 +303,17 @@ function Overview() {
   );
 }
 
-function SleepRow({ label, value, pct, subtle }: { label: string; value: string; pct: number; subtle?: boolean }) {
+function SleepRow({
+  label,
+  value,
+  pct,
+  subtle,
+}: {
+  label: string;
+  value: string;
+  pct: number;
+  subtle?: boolean;
+}) {
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between text-xs">
@@ -189,7 +321,10 @@ function SleepRow({ label, value, pct, subtle }: { label: string; value: string;
         <span className="font-mono font-medium">{value}</span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-        <div className={`h-full rounded-full ${subtle ? "bg-muted-foreground/50" : "bg-gradient-to-r from-[var(--brand)] to-[var(--brand-glow)]"}`} style={{ width: `${pct}%` }} />
+        <div
+          className={`h-full rounded-full ${subtle ? "bg-muted-foreground/50" : "bg-gradient-to-r from-[var(--brand)] to-[var(--brand-glow)]"}`}
+          style={{ width: `${pct}%` }}
+        />
       </div>
     </div>
   );

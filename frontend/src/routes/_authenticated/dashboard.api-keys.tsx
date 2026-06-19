@@ -39,17 +39,33 @@ function ApiKeysPage() {
       <PageHeader
         title="API Keys"
         description="Manage credentials for the Atriveo Bio API."
-        actions={<Button onClick={onCreate} disabled={createKey.isPending} className="bg-foreground text-background hover:bg-foreground/90"><Plus className="h-4 w-4" /> Create API Key</Button>}
+        actions={
+          <Button
+            onClick={onCreate}
+            disabled={createKey.isPending}
+            className="bg-foreground text-background hover:bg-foreground/90"
+          >
+            <Plus className="h-4 w-4" /> Create API Key
+          </Button>
+        }
       />
       {revealed ? (
         <div className="rounded-xl border border-border bg-muted/40 p-4 font-mono text-xs">
           New key (shown once): <span className="text-foreground">{revealed}</span>
-          <Button variant="ghost" size="sm" className="ml-2" onClick={() => copy(revealed)}><Copy className="h-3 w-3" /></Button>
+          <Button variant="ghost" size="sm" className="ml-2" onClick={() => copy(revealed)}>
+            <Copy className="h-3 w-3" />
+          </Button>
         </div>
       ) : null}
       <div className="grid gap-4 md:grid-cols-3">
-        <StatCard label="Requests · 30d" value={usage.data ? usage.data.total_requests.toLocaleString() : "—"} />
-        <StatCard label="Avg latency" value={usage.data?.avg_latency_ms != null ? `${usage.data.avg_latency_ms} ms` : "—"} />
+        <StatCard
+          label="Requests · 30d"
+          value={usage.data ? usage.data.total_requests.toLocaleString() : "—"}
+        />
+        <StatCard
+          label="Avg latency"
+          value={usage.data?.avg_latency_ms != null ? `${usage.data.avg_latency_ms} ms` : "—"}
+        />
         <StatCard label="Error rate" value={usage.data ? `${usage.data.error_rate_pct}%` : "—"} />
       </div>
       <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -66,9 +82,17 @@ function ApiKeysPage() {
           </thead>
           <tbody>
             {isLoading ? (
-              <tr><td colSpan={6} className="px-5 py-8 text-muted-foreground">Loading keys…</td></tr>
+              <tr>
+                <td colSpan={6} className="px-5 py-8 text-muted-foreground">
+                  Loading keys…
+                </td>
+              </tr>
             ) : keys.length === 0 ? (
-              <tr><td colSpan={6} className="px-5 py-8 text-muted-foreground">No API keys yet.</td></tr>
+              <tr>
+                <td colSpan={6} className="px-5 py-8 text-muted-foreground">
+                  No API keys yet.
+                </td>
+              </tr>
             ) : (
               keys.map((k) => (
                 <tr key={k.id} className="border-t border-border hover:bg-muted/30">
@@ -76,15 +100,21 @@ function ApiKeysPage() {
                   <td className="px-5 py-4 font-mono text-xs">
                     <span className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-2 py-1">
                       {k.prefix}…
-                      <Copy className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground" onClick={() => copy(k.prefix)} />
+                      <Copy
+                        className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                        onClick={() => copy(k.prefix)}
+                      />
                     </span>
                   </td>
                   <td className="px-5 py-4 text-muted-foreground">{k.created_at.slice(0, 10)}</td>
-                  <td className="px-5 py-4 text-muted-foreground">{k.last_used_at ? new Date(k.last_used_at).toLocaleString() : "Never"}</td>
+                  <td className="px-5 py-4 text-muted-foreground">
+                    {k.last_used_at ? new Date(k.last_used_at).toLocaleString() : "Never"}
+                  </td>
                   <td className="px-5 py-4 text-right font-mono">{k.requests.toLocaleString()}</td>
                   <td className="px-5 py-4 text-right">
                     <Button
-                      variant="ghost" size="sm"
+                      variant="ghost"
+                      size="sm"
                       className="text-muted-foreground hover:text-destructive"
                       onClick={async () => {
                         await revokeKey.mutateAsync(k.id);

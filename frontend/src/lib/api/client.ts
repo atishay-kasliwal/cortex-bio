@@ -1,7 +1,8 @@
 // Centralized Cortex Bio API client — JWT, refresh, retries, typed errors.
 import { supabase } from "@/integrations/supabase/client";
 
-export const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "https://api.cortex.bio";
+export const API_BASE =
+  (import.meta.env.VITE_API_URL as string | undefined) ?? "https://api.cortex.bio";
 export const DOCS_API_BASE = (import.meta.env.VITE_DOCS_API_URL as string | undefined) ?? API_BASE;
 
 export class ApiError extends Error {
@@ -19,9 +20,7 @@ export class ApiError extends Error {
 async function authHeader(): Promise<Record<string, string>> {
   if (typeof window === "undefined") return {};
   const { data } = await supabase.auth.getSession();
-  return data.session?.access_token
-    ? { Authorization: `Bearer ${data.session.access_token}` }
-    : {};
+  return data.session?.access_token ? { Authorization: `Bearer ${data.session.access_token}` } : {};
 }
 
 async function refreshSession(): Promise<boolean> {
@@ -37,14 +36,7 @@ export type ApiInit = RequestInit & {
 };
 
 export async function api<T = unknown>(path: string, init: ApiInit = {}): Promise<T> {
-  const {
-    auth = true,
-    headers,
-    _retried,
-    _retryCount = 0,
-    baseUrl = API_BASE,
-    ...rest
-  } = init;
+  const { auth = true, headers, _retried, _retryCount = 0, baseUrl = API_BASE, ...rest } = init;
 
   const merged: Record<string, string> = {
     "Content-Type": "application/json",

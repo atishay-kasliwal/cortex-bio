@@ -80,7 +80,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Atriveo Bio — Wearable Intelligence for Peak Performance" },
-      { name: "description", content: "Transform Apple Health, WHOOP, Oura, Garmin and Fitbit data into cognitive readiness scores, deep work windows and performance forecasts." },
+      {
+        name: "description",
+        content:
+          "Transform Apple Health, WHOOP, Oura, Garmin and Fitbit data into cognitive readiness scores, deep work windows and performance forecasts.",
+      },
       { name: "author", content: "Atriveo" },
       { property: "og:title", content: "Atriveo Bio — Wearable Intelligence" },
       { property: "og:description", content: "Know when you'll perform at your best." },
@@ -91,7 +95,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,

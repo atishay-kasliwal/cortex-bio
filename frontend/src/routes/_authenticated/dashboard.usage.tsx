@@ -20,7 +20,9 @@ function UsagePage() {
     return (
       <div className="space-y-6">
         <PageHeader title="API usage" description="Unable to load usage." />
-        <button type="button" className="text-sm underline" onClick={() => refetch()}>Retry</button>
+        <button type="button" className="text-sm underline" onClick={() => refetch()}>
+          Retry
+        </button>
       </div>
     );
   }
@@ -29,25 +31,45 @@ function UsagePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="API usage" description="Requests, latency, and endpoint breakdown for your account." />
+      <PageHeader
+        title="API usage"
+        description="Requests, latency, and endpoint breakdown for your account."
+      />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <StatCard label="API Requests" value={(data?.total_requests ?? 0).toLocaleString()} />
         <StatCard label="Forecast Calls" value={String(data?.forecast_calls ?? 0)} />
         <StatCard label="Readiness Calls" value={String(data?.readiness_calls ?? 0)} />
         <StatCard label="Active Keys" value={String(data?.active_keys ?? keys.data?.length ?? 0)} />
-        <StatCard label="Error rate" value={`${data?.error_rate_pct ?? 0}%`} hint={data?.avg_latency_ms != null ? `Avg ${data.avg_latency_ms} ms` : undefined} />
+        <StatCard
+          label="Error rate"
+          value={`${data?.error_rate_pct ?? 0}%`}
+          hint={data?.avg_latency_ms != null ? `Avg ${data.avg_latency_ms} ms` : undefined}
+        />
       </div>
       <div className="rounded-xl border border-border bg-card p-6">
         <h3 className="mb-4 font-medium tracking-tight">Requests over time</h3>
         <div className="h-[260px]">
           {chartData.length === 0 ? (
-            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">No API traffic yet — dashboard calls are logged automatically.</div>
+            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+              No API traffic yet — dashboard calls are logged automatically.
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
                 <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="date" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis
+                  dataKey="date"
+                  stroke="var(--muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip />
                 <Bar dataKey="count" fill="var(--brand)" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -68,7 +90,11 @@ function UsagePage() {
           </thead>
           <tbody>
             {(data?.by_endpoint ?? []).length === 0 ? (
-              <tr><td colSpan={4} className="px-5 py-8 text-muted-foreground">No endpoint data yet.</td></tr>
+              <tr>
+                <td colSpan={4} className="px-5 py-8 text-muted-foreground">
+                  No endpoint data yet.
+                </td>
+              </tr>
             ) : (
               (data?.by_endpoint ?? []).slice(0, 15).map((row, i) => (
                 <tr key={i} className="border-t border-border">
@@ -96,11 +122,17 @@ function UsagePage() {
           </thead>
           <tbody>
             {(data?.recent_requests ?? []).length === 0 ? (
-              <tr><td colSpan={5} className="px-5 py-8 text-muted-foreground">No recent requests.</td></tr>
+              <tr>
+                <td colSpan={5} className="px-5 py-8 text-muted-foreground">
+                  No recent requests.
+                </td>
+              </tr>
             ) : (
               (data?.recent_requests ?? []).map((r) => (
                 <tr key={r.id} className="border-t border-border">
-                  <td className="px-5 py-3 text-muted-foreground">{new Date(r.created_at).toLocaleString()}</td>
+                  <td className="px-5 py-3 text-muted-foreground">
+                    {new Date(r.created_at).toLocaleString()}
+                  </td>
                   <td className="px-5 py-3 font-mono text-xs">{r.method}</td>
                   <td className="px-5 py-3 font-mono text-xs">{r.endpoint}</td>
                   <td className="px-5 py-3 text-right">{r.status}</td>

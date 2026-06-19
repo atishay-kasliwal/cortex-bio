@@ -13,9 +13,17 @@ function fmt(iso: string | null): string {
 export function DataFreshnessBar({ freshness }: { freshness: UserFreshness }) {
   return (
     <div className="flex flex-wrap gap-x-6 gap-y-1 rounded-lg border border-border bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground">
-      <span><span className="text-foreground/80">Last sync</span> · {fmt(freshness.last_sync_at)}</span>
-      <span><span className="text-foreground/80">Last readiness</span> · {fmt(freshness.last_readiness_at)}</span>
-      <span><span className="text-foreground/80">Last forecast</span> · {fmt(freshness.last_forecast_at)}</span>
+      <span>
+        <span className="text-foreground/80">Last sync</span> · {fmt(freshness.last_sync_at)}
+      </span>
+      <span>
+        <span className="text-foreground/80">Last readiness</span> ·{" "}
+        {fmt(freshness.last_readiness_at)}
+      </span>
+      <span>
+        <span className="text-foreground/80">Last forecast</span> ·{" "}
+        {fmt(freshness.last_forecast_at)}
+      </span>
     </div>
   );
 }

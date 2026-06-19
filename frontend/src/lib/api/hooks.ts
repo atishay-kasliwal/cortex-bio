@@ -75,7 +75,10 @@ export function useTrends(days = 7) {
 }
 
 export function useApiKeys() {
-  return useQuery({ queryKey: queryKeys.keys, queryFn: async () => (await cortexApi.listKeys()).keys });
+  return useQuery({
+    queryKey: queryKeys.keys,
+    queryFn: async () => (await cortexApi.listKeys()).keys,
+  });
 }
 
 export function useUsage(days = 30) {
@@ -153,11 +156,7 @@ export function useOverviewData() {
     windows.isLoading ||
     freshness.isLoading;
 
-  const isError =
-    profile.isError ||
-    readiness.isError ||
-    forecast.isError ||
-    windows.isError;
+  const isError = profile.isError || readiness.isError || forecast.isError || windows.isError;
 
   const refetch = () => {
     profile.refetch();
@@ -169,5 +168,16 @@ export function useOverviewData() {
     freshness.refetch();
   };
 
-  return { profile, readiness, forecast, windows, trends, history, freshness, isLoading, isError, refetch };
+  return {
+    profile,
+    readiness,
+    forecast,
+    windows,
+    trends,
+    history,
+    freshness,
+    isLoading,
+    isError,
+    refetch,
+  };
 }

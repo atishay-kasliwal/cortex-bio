@@ -30,7 +30,10 @@ export const resetSchema = z
     password: passwordSchema,
     confirm: z.string().min(1, "Please confirm your password"),
   })
-  .refine((v) => v.password === v.confirm, { path: ["confirm"], message: "Passwords do not match" });
+  .refine((v) => v.password === v.confirm, {
+    path: ["confirm"],
+    message: "Passwords do not match",
+  });
 
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;

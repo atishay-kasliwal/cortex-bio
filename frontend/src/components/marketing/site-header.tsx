@@ -10,16 +10,28 @@ export function SiteHeader() {
           <Logo />
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a href="#features" className="hover:text-foreground transition">Features</a>
-          <a href="#how" className="hover:text-foreground transition">How it works</a>
-          <Link to="/docs" className="hover:text-foreground transition">Docs</Link>
-          <a href="#pricing" className="hover:text-foreground transition">Pricing</a>
+          <a href="#features" className="hover:text-foreground transition">
+            Features
+          </a>
+          <a href="#how" className="hover:text-foreground transition">
+            How it works
+          </a>
+          <Link to="/docs" className="hover:text-foreground transition">
+            Docs
+          </Link>
+          <a href="#pricing" className="hover:text-foreground transition">
+            Pricing
+          </a>
         </nav>
         <div className="flex items-center gap-2">
           <Button asChild variant="ghost" size="sm">
             <Link to="/auth/login">Sign in</Link>
           </Button>
-          <Button asChild size="sm" className="bg-foreground text-background hover:bg-foreground/90">
+          <Button
+            asChild
+            size="sm"
+            className="bg-foreground text-background hover:bg-foreground/90"
+          >
             <Link to="/auth/signup">Get started</Link>
           </Button>
         </div>

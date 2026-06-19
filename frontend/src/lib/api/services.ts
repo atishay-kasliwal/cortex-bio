@@ -91,7 +91,12 @@ export type UserFreshness = {
   has_readiness: boolean;
   has_forecast: boolean;
   connected_providers: number;
-  onboarding_step: "connect_provider" | "sync_data" | "build_baseline" | "view_forecast" | "complete";
+  onboarding_step:
+    | "connect_provider"
+    | "sync_data"
+    | "build_baseline"
+    | "view_forecast"
+    | "complete";
   onboarding_complete: boolean;
 };
 
@@ -109,16 +114,25 @@ export const cortexApi = {
   updateProfile: (body: { full_name?: string; timezone?: string }) =>
     api<ProfileResponse>("/api/profile", { method: "PATCH", body: JSON.stringify(body) }),
   readinessToday: () => apiOrNull<ReadinessToday>("/v1/readiness/today"),
-  readinessHistory: (days = 7) => api<{ history: { date: string; readiness_score: number }[] }>(`/v1/readiness/history?days=${days}`),
+  readinessHistory: (days = 7) =>
+    api<{ history: { date: string; readiness_score: number }[] }>(
+      `/v1/readiness/history?days=${days}`,
+    ),
   forecast: () => apiOrNull<ForecastResponse>("/v1/forecast"),
   windowsToday: () => apiOrNull<WindowsToday>("/v1/windows/today"),
   windowsWeek: () => api<{ windows: WindowsToday[] }>("/v1/windows/week"),
   insights: (limit = 20) => api<{ insights: InsightRow[] }>(`/v1/insights?limit=${limit}`),
-  correlations: () => api<{ correlations: unknown[]; summary: Record<string, unknown> }>("/v1/correlations"),
+  correlations: () =>
+    api<{ correlations: unknown[]; summary: Record<string, unknown> }>("/v1/correlations"),
   trends: (days = 7) =>
-    api<{ trends: { date: string; avg_hrv: number | null; resting_hr: number | null; readiness_score: number | null }[] }>(
-      `/v1/trends?days=${days}`,
-    ),
+    api<{
+      trends: {
+        date: string;
+        avg_hrv: number | null;
+        resting_hr: number | null;
+        readiness_score: number | null;
+      }[];
+    }>(`/v1/trends?days=${days}`),
   chronotype: () => api<{ chronotype: { classification?: string } }>("/v1/chronotype"),
   listKeys: () => api<{ keys: ApiKeyRow[] }>("/api/keys"),
   createKey: (name: string) =>
@@ -129,10 +143,8 @@ export const cortexApi = {
   revokeKey: (id: string) => api(`/api/keys/${id}`, { method: "DELETE" }),
   usage: (days = 30) => api<UsageResponse>(`/api/keys/usage?days=${days}`),
   providers: () => api<{ providers: ProviderRow[] }>("/api/providers"),
-  connectProvider: (id: string) =>
-    api(`/api/providers/${id}/connect`, { method: "POST" }),
-  disconnectProvider: (id: string) =>
-    api(`/api/providers/${id}/disconnect`, { method: "POST" }),
+  connectProvider: (id: string) => api(`/api/providers/${id}/connect`, { method: "POST" }),
+  disconnectProvider: (id: string) => api(`/api/providers/${id}/disconnect`, { method: "POST" }),
   freshness: () => api<UserFreshness>("/api/meta/freshness"),
   openApiSpec: () =>
     api<{

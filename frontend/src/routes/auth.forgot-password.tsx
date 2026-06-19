@@ -18,8 +18,13 @@ export const Route = createFileRoute("/auth/forgot-password")({
 function ForgotPage() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<ForgotInput>({
-    resolver: zodResolver(forgotSchema), defaultValues: { email: "" },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotInput>({
+    resolver: zodResolver(forgotSchema),
+    defaultValues: { email: "" },
   });
   const onSubmit = async (values: ForgotInput) => {
     setSubmitting(true);
@@ -34,7 +39,13 @@ function ForgotPage() {
     <AuthCard
       title="Reset your password"
       subtitle="Enter your email and we'll send you a reset link."
-      footer={<><Link to="/auth/login" className="text-foreground hover:underline">Back to sign in</Link></>}
+      footer={
+        <>
+          <Link to="/auth/login" className="text-foreground hover:underline">
+            Back to sign in
+          </Link>
+        </>
+      }
     >
       {sent ? (
         <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
@@ -47,7 +58,11 @@ function ForgotPage() {
             <Input id="email" type="email" autoComplete="email" {...register("email")} />
             <FieldError msg={errors.email?.message} />
           </div>
-          <Button type="submit" disabled={submitting} className="w-full bg-foreground text-background hover:bg-foreground/90 h-10">
+          <Button
+            type="submit"
+            disabled={submitting}
+            className="w-full bg-foreground text-background hover:bg-foreground/90 h-10"
+          >
             {submitting ? "Sending…" : "Send reset link"}
           </Button>
         </form>

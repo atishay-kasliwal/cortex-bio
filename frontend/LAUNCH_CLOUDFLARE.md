@@ -18,13 +18,13 @@ This error means **no DNS record exists** for `bio.atriveo.com`. The app cannot 
 5. **Build output:** `.output/public`
 6. **Environment variables** (Production):
 
-| Variable | Value |
-|----------|-------|
-| `NODE_VERSION` | `22` |
-| `VITE_API_URL` | `https://api.cortex.bio` |
-| `VITE_DOCS_API_URL` | `https://api.cortex.bio` |
-| `VITE_SUPABASE_URL` | Your Supabase project URL |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key |
+| Variable                        | Value                     |
+| ------------------------------- | ------------------------- |
+| `NODE_VERSION`                  | `22`                      |
+| `VITE_API_URL`                  | `https://api.cortex.bio`  |
+| `VITE_DOCS_API_URL`             | `https://api.cortex.bio`  |
+| `VITE_SUPABASE_URL`             | Your Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key         |
 
 5. Deploy once — note your Pages URL: `atriveo-bio.pages.dev` (or similar)
 
@@ -32,14 +32,14 @@ This error means **no DNS record exists** for `bio.atriveo.com`. The app cannot 
 
 Cloudflare → **DNS** → **Records** → **Add record**
 
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
+| Type      | Name  | Target                  | Proxy                  |
+| --------- | ----- | ----------------------- | ---------------------- |
 | **CNAME** | `bio` | `atriveo-bio.pages.dev` | Proxied (orange cloud) |
 
 For preview subdomain:
 
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
+| Type      | Name          | Target                  | Proxy   |
+| --------- | ------------- | ----------------------- | ------- |
 | **CNAME** | `preview.bio` | `atriveo-bio.pages.dev` | Proxied |
 
 > **Name** is `bio`, not `bio.atriveo.com` — Cloudflare appends the zone automatically.
@@ -57,10 +57,10 @@ Wait 1–5 minutes for DNS propagation, then reload `https://bio.atriveo.com`.
 
 ## Automatic deployments
 
-| Event | Result |
-|-------|--------|
-| Push to `main` | Production deploy → bio.atriveo.com |
-| Open PR | Preview deploy → `*.pages.dev` + preview.bio.atriveo.com |
+| Event          | Result                                                   |
+| -------------- | -------------------------------------------------------- |
+| Push to `main` | Production deploy → bio.atriveo.com                      |
+| Open PR        | Preview deploy → `*.pages.dev` + preview.bio.atriveo.com |
 
 Enable in Pages → **Settings** → **Builds & deployments** → Production branch: `main`.
 

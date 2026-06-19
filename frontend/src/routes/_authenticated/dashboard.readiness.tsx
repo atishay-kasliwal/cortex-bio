@@ -22,33 +22,53 @@ function ReadinessPage() {
     return (
       <div className="space-y-6">
         <PageHeader title="Cognitive readiness" description="Unable to load readiness." />
-        <button type="button" className="text-sm underline" onClick={() => refetch()}>Retry</button>
+        <button type="button" className="text-sm underline" onClick={() => refetch()}>
+          Retry
+        </button>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Cognitive readiness" description="A calibrated estimate of your capacity for high-stakes cognitive work right now." />
+      <PageHeader
+        title="Cognitive readiness"
+        description="A calibrated estimate of your capacity for high-stakes cognitive work right now."
+      />
       <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
         <div className="rounded-xl border border-border bg-card p-6">
           <ReadinessRing score={isLoading ? 0 : score} />
           <div className="mt-6 space-y-2 text-center">
-            <div className="text-sm font-medium text-[oklch(0.7_0.17_160)]">{isLoading ? "—" : readinessLabel(score)}</div>
+            <div className="text-sm font-medium text-[oklch(0.7_0.17_160)]">
+              {isLoading ? "—" : readinessLabel(score)}
+            </div>
             <p className="text-xs text-muted-foreground">
-              {data?.contributors[0]?.factor ?? "Connect a wearable and sync data to compute readiness."}
+              {data?.contributors[0]?.factor ??
+                "Connect a wearable and sync data to compute readiness."}
             </p>
           </div>
         </div>
         <div className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
-            <StatCard label="HRV (rMSSD)" value={df?.avg_hrv != null ? `${Math.round(df.avg_hrv)} ms` : "—"} />
-            <StatCard label="RHR" value={df?.resting_hr != null ? `${Math.round(df.resting_hr)} bpm` : "—"} />
-            <StatCard label="Steps" value={df?.steps != null ? String(Math.round(df.steps)) : "—"} hint="yesterday" />
+            <StatCard
+              label="HRV (rMSSD)"
+              value={df?.avg_hrv != null ? `${Math.round(df.avg_hrv)} ms` : "—"}
+            />
+            <StatCard
+              label="RHR"
+              value={df?.resting_hr != null ? `${Math.round(df.resting_hr)} bpm` : "—"}
+            />
+            <StatCard
+              label="Steps"
+              value={df?.steps != null ? String(Math.round(df.steps)) : "—"}
+              hint="yesterday"
+            />
           </div>
           <div className="rounded-xl border border-border bg-card p-6">
             <h3 className="font-medium tracking-tight">Score components</h3>
-            <p className="text-xs text-muted-foreground">How each signal contributes to today's readiness.</p>
+            <p className="text-xs text-muted-foreground">
+              How each signal contributes to today's readiness.
+            </p>
             <div className="mt-5 space-y-4">
               {components.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No component data yet.</p>
@@ -60,7 +80,10 @@ function ReadinessPage() {
                       <span className="font-mono text-muted-foreground">{c.value}</span>
                     </div>
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                      <div className="h-full rounded-full bg-gradient-to-r from-[var(--brand)] to-[var(--brand-glow)]" style={{ width: `${c.value}%` }} />
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[var(--brand)] to-[var(--brand-glow)]"
+                        style={{ width: `${c.value}%` }}
+                      />
                     </div>
                   </div>
                 ))
@@ -87,7 +110,17 @@ function ReadinessRing({ score }: { score: number }) {
             <stop offset="100%" stopColor="var(--brand-glow)" />
           </linearGradient>
         </defs>
-        <circle cx="100" cy="100" r={r} stroke="url(#ringG)" strokeWidth="14" fill="none" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={offset} />
+        <circle
+          cx="100"
+          cy="100"
+          r={r}
+          stroke="url(#ringG)"
+          strokeWidth="14"
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray={c}
+          strokeDashoffset={offset}
+        />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-5xl font-semibold tracking-tight">{score || "—"}</div>

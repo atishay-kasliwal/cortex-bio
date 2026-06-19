@@ -35,7 +35,9 @@ export function OnboardingSteps({ freshness }: { freshness: UserFreshness }) {
                   {step.label}
                 </Link>
               ) : (
-                <span className={done ? "text-muted-foreground line-through" : "text-muted-foreground"}>
+                <span
+                  className={done ? "text-muted-foreground line-through" : "text-muted-foreground"}
+                >
                   {step.label}
                 </span>
               )}

@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { z } from 'zod';
 
 import { prisma } from '../lib/prisma.js';
+import { toInputJson } from '../lib/json.js';
 import { toDateOnly } from '../lib/timezone.js';
 
 export const cortexDailySchema = z.object({
@@ -45,7 +46,7 @@ export async function ingestCortexDaily(
         researchMinutes: record.research_minutes ?? null,
         meetingMinutes: record.meeting_minutes ?? null,
         outputScore: record.output_score ?? null,
-        metadata: record.metadata ?? {},
+        metadata: toInputJson(record.metadata ?? {}),
       },
       update: {
         deepWorkMinutes: record.deep_work_minutes ?? null,
@@ -56,7 +57,7 @@ export async function ingestCortexDaily(
         researchMinutes: record.research_minutes ?? null,
         meetingMinutes: record.meeting_minutes ?? null,
         outputScore: record.output_score ?? null,
-        metadata: record.metadata ?? {},
+        metadata: toInputJson(record.metadata ?? {}),
       },
     });
 
