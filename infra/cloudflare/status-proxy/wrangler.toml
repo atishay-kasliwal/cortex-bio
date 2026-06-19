@@ -1,0 +1,10 @@
+name = "cortex-bio-status"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+# Route: status.cortex.bio/*
+# Attach custom domain in Cloudflare dashboard after deploy.
+
+[vars]
+API_ORIGIN = "https://api.cortex.bio"
+APP_ORIGIN = "https://bio.atriveo.com"

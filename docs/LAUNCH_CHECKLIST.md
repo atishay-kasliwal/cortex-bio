@@ -126,6 +126,16 @@ See: `infra/cloudflare/docs-proxy/README.md`
 
 ---
 
+## Status page (status.cortex.bio)
+
+- [ ] `cd infra/cloudflare/status-proxy && npm install`
+- [ ] `npx wrangler deploy`
+- [ ] Attach custom domain `status.cortex.bio`
+
+See: `infra/cloudflare/status-proxy/README.md`
+
+---
+
 ## Post-deploy validation
 
 - [ ] `https://bio.atriveo.com` loads
@@ -134,6 +144,7 @@ See: `infra/cloudflare/docs-proxy/README.md`
 - [ ] Onboarding steps show for new user
 - [ ] API keys page shows default key
 - [ ] `https://docs.cortex.bio/docs` loads Swagger UI
+- [ ] `https://status.cortex.bio` shows operational status
 - [ ] `https://bio.atriveo.com/docs` loads developer portal
 - [ ] PR creates preview deployment on Cloudflare Pages
 

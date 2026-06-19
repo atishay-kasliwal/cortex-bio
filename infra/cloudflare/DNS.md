@@ -64,6 +64,24 @@ Or attach `docs.cortex.bio` directly as a Worker custom domain in the dashboard.
 | `/openapi.json` | `api.cortex.bio/openapi.json` |
 | `/playground` | `api.cortex.bio/playground` |
 
+## Status page (status.cortex.bio)
+
+Deploy the status worker:
+
+```bash
+cd cortex-bio/infra/cloudflare/status-proxy
+npm install
+npx wrangler deploy
+```
+
+Then attach custom domain in Workers → Triggers:
+
+| Type | Name | Target | Proxy |
+|------|------|--------|-------|
+| CNAME | `status` | `cortex-bio-status.<account>.workers.dev` | Proxied |
+
+Or add `status.cortex.bio` directly as a Worker custom domain in the dashboard.
+
 ## SSL
 
 Cloudflare Universal SSL covers `*.atriveo.com` and custom hostnames once validated.
@@ -74,4 +92,5 @@ Cloudflare Universal SSL covers `*.atriveo.com` and custom hostnames once valida
 curl -sI https://bio.atriveo.com | head -5
 curl -sI https://docs.cortex.bio/docs | head -5
 curl -s https://api.cortex.bio/health
+curl -sI https://status.cortex.bio | head -5
 ```

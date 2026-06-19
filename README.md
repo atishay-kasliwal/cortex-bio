@@ -10,7 +10,7 @@ API-first · Research-backed · Self-hostable
 [![API](https://img.shields.io/badge/API-v1-blue)](https://api.cortex.bio/docs)
 [![npm](https://img.shields.io/badge/npm-%40cortexbio%2Fsdk-CB3837)](sdk/typescript/)
 
-[Playground](https://playground.cortex.bio) · [API Docs](/docs) · [OpenAPI](/openapi.json) · [Launch playbook](docs/LAUNCH.md) · [GitHub](https://github.com/atriveo/cortex-bio)
+[Playground](https://playground.cortex.bio) · [API Docs](/docs) · [OpenAPI](/openapi.json) · [Launch checklist](docs/LAUNCH_CHECKLIST.md) · [GitHub](https://github.com/atriveo/cortex-bio)
 
 ---
 
