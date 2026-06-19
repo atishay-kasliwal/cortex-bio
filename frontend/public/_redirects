@@ -1,1 +1,2 @@
-/*    /index.html   200
+# Routing is handled by the TanStack Start / Nitro worker.
+# Do not add SPA fallbacks here — they break Cloudflare Workers deploys.
