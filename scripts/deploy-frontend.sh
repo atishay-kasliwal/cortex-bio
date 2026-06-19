@@ -18,27 +18,22 @@ export VITE_API_URL="${VITE_API_URL:-https://api.cortex.bio}"
 export VITE_DOCS_API_URL="${VITE_DOCS_API_URL:-https://api.cortex.bio}"
 npm run build
 
-OUT="$FRONTEND/.output/public"
-if [[ ! -d "$OUT" ]]; then
-  echo "Build output not found at $OUT"
+OUT="$FRONTEND/.output"
+if [[ ! -d "$OUT/server" ]]; then
+  echo "Nitro output not found at $OUT/server — ensure vite.config.ts has nitro: true"
   exit 1
 fi
 
-echo "==> Build OK ($(du -sh "$OUT" | cut -f1))"
+echo "==> Build OK (server + public)"
 
 if ! command -v wrangler &>/dev/null; then
   echo "Install wrangler: npm i -g wrangler  (or npx wrangler)"
-  echo "Dry-run complete — upload $OUT manually or connect GitHub in Cloudflare Pages."
+  echo "Deploy: cd $OUT && npx wrangler deploy --domain bio.atriveo.com"
   exit 0
 fi
 
 if [[ "$DRY_RUN" == "--dry-run" ]]; then
-  echo "==> Dry-run: would deploy $OUT to Cloudflare Pages project 'atriveo-bio'"
-  wrangler pages deploy "$OUT" --project-name=atriveo-bio --dry-run 2>/dev/null || {
-    echo "Note: create the Pages project first:"
-    echo "  wrangler pages project create atriveo-bio --production-branch=main"
-    echo "Then: wrangler pages deploy $OUT --project-name=atriveo-bio"
-  }
+  echo "==> Dry-run: would deploy $OUT via wrangler (worker + assets)"
 else
-  wrangler pages deploy "$OUT" --project-name=atriveo-bio --branch=main
+  (cd "$OUT" && npx wrangler deploy --domain bio.atriveo.com)
 fi
