@@ -13,12 +13,12 @@ export const cloudflarePagesConfig = {
   previewDomains: ["preview.bio.atriveo.com"],
   environment: {
     production: {
-      VITE_API_URL: "https://api.cortex.bio",
-      VITE_DOCS_API_URL: "https://api.cortex.bio",
+      VITE_API_URL: "https://api.atriveo.com",
+      VITE_DOCS_API_URL: "https://api.atriveo.com",
     },
     preview: {
-      VITE_API_URL: "https://api.cortex.bio",
-      VITE_DOCS_API_URL: "https://api.cortex.bio",
+      VITE_API_URL: "https://api.atriveo.com",
+      VITE_DOCS_API_URL: "https://api.atriveo.com",
     },
   },
 } as const;

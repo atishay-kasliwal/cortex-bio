@@ -22,7 +22,7 @@ const envSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform((v) => v === 'true'),
-  PUBLIC_API_URL: z.string().url().default('https://api.cortex.bio'),
+  PUBLIC_API_URL: z.string().url().default('https://api.atriveo.com'),
   ADMIN_SECRET: z.string().optional(),
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_JWT_SECRET: z.string().optional(),

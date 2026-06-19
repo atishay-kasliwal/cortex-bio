@@ -1,4 +1,4 @@
-# Fly.io — Cortex Bio API (api.cortex.bio)
+# Fly.io — Cortex Bio API (api.atriveo.com)
 # Deploy from repo root: fly deploy --config fly.toml
 
 app = 'cortex-bio-api'
@@ -9,7 +9,7 @@ primary_region = 'iad'
 
 [env]
   PORT = '8000'
-  PUBLIC_API_URL = 'https://api.cortex.bio'
+  PUBLIC_API_URL = 'https://api.atriveo.com'
   FEATURE_FORECASTING = 'true'
   FEATURE_ML = 'true'
   FEATURE_CORTEX = 'true'

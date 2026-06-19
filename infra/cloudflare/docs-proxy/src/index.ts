@@ -1,8 +1,8 @@
 /**
- * docs.cortex.bio → api.cortex.bio
+ * docs.atriveo.com → api.atriveo.com
  * Proxies OpenAPI docs, Swagger UI, and playground to the Cortex Bio API.
  */
-const API_ORIGIN = 'https://api.cortex.bio';
+const API_ORIGIN = 'https://api.atriveo.com';
 
 const ALLOWED_PREFIXES = ['/docs', '/openapi.json', '/playground', '/health'];
 

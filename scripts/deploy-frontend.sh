@@ -14,8 +14,8 @@ if [[ ! -d node_modules ]]; then
 fi
 
 echo "==> Building TanStack Start app…"
-export VITE_API_URL="${VITE_API_URL:-https://api.cortex.bio}"
-export VITE_DOCS_API_URL="${VITE_DOCS_API_URL:-https://api.cortex.bio}"
+export VITE_API_URL="${VITE_API_URL:-https://api.atriveo.com}"
+export VITE_DOCS_API_URL="${VITE_DOCS_API_URL:-https://api.atriveo.com}"
 npm run build
 
 OUT="$FRONTEND/.output"

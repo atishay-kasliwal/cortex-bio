@@ -6,5 +6,5 @@ compatibility_date = "2024-01-01"
 # Attach custom domain in Cloudflare dashboard after deploy.
 
 [vars]
-API_ORIGIN = "https://api.cortex.bio"
+API_ORIGIN = "https://api.atriveo.com"
 APP_ORIGIN = "https://bio.atriveo.com"

@@ -1,8 +1,8 @@
 /**
- * status.cortex.bio — public status page for Cortex Bio.
+ * status.atriveo.com — public status page for Cortex Bio.
  * Checks API health and renders a simple HTML status board.
  */
-const API_ORIGIN = 'https://api.cortex.bio';
+const API_ORIGIN = 'https://api.atriveo.com';
 const APP_ORIGIN = 'https://bio.atriveo.com';
 
 type CheckResult = {
@@ -100,7 +100,7 @@ function renderPage(checks: CheckResult[], generatedAt: string): string {
     <footer>
       Last checked ${generatedAt} UTC ·
       <a href="${APP_ORIGIN}">Atriveo Bio</a> ·
-      <a href="https://docs.cortex.bio">API Docs</a>
+      <a href="https://docs.atriveo.com">API Docs</a>
     </footer>
   </main>
 </body>
@@ -122,7 +122,7 @@ export default {
     const checks = await Promise.all([
       probe('API', `${API_ORIGIN}/health`),
       probe('App', `${APP_ORIGIN}/`),
-      probe('Docs', 'https://docs.cortex.bio/health'),
+      probe('Docs', 'https://docs.atriveo.com/health'),
     ]);
 
     const html = renderPage(checks, new Date().toISOString());

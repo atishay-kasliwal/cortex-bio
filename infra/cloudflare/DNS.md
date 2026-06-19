@@ -1,96 +1,66 @@
 # Cloudflare DNS — Atriveo Bio platform
 
-## URGENT: bio.atriveo.com shows NXDOMAIN?
+All services live under **atriveo.com** (you control this zone).
 
-Add this record in the **atriveo.com** DNS zone:
-
-| Type | Name | Content | Proxy |
-|------|------|---------|-------|
-| CNAME | `bio` | `atriveo-bio.pages.dev` | Proxied |
-
-Then attach `bio.atriveo.com` as a custom domain in Cloudflare Pages.
-
-Full walkthrough: **`frontend/LAUNCH_CLOUDFLARE.md`**
+| Service  | Domain               |
+| -------- | -------------------- |
+| Frontend | `bio.atriveo.com`    |
+| API      | `api.atriveo.com`    |
+| Docs     | `docs.atriveo.com`   |
+| Status   | `status.atriveo.com` |
 
 ---
 
-Apply these records in the **atriveo.com** zone (Cloudflare DNS).
+## Frontend (`bio.atriveo.com`)
 
-## Production app (Cloudflare Pages)
+| Type  | Name | Target                    | Proxy   |
+| ----- | ---- | ------------------------- | ------- |
+| CNAME | `bio` | `<worker or pages host>` | Proxied |
 
-After creating the Pages project `atriveo-bio` and adding custom domains in the dashboard:
+Attach `bio.atriveo.com` as a custom domain on the TanStack Start worker or Pages project.
 
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
-| CNAME | `bio` | `<project>.pages.dev` | Proxied |
-| CNAME | `preview.bio` | `<project>.pages.dev` | Proxied |
+---
 
-Pages → Custom domains → add `bio.atriveo.com` (production) and `preview.bio.atriveo.com` (preview).
+## API (`api.atriveo.com`) — Fly.io
 
-## API (api.cortex.bio)
+After `fly certs add api.atriveo.com --app cortex-bio-api`:
 
-Point to your API host (Fly, Railway, etc.):
+| Type  | Name  | Content                 | Proxy   |
+| ----- | ----- | ----------------------- | ------- |
+| A     | `api` | `66.241.124.219`        | DNS only (gray cloud) |
+| AAAA  | `api` | `2a09:8280:1::12f:22f7:0` | DNS only |
 
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
-| CNAME | `api.cortex` | `<your-api-host>` | Proxied (optional) |
+> Use **DNS only** (not proxied) for Fly custom domains unless you use Fly's SSL + Cloudflare orange-cloud setup intentionally.
 
-Or if API is on a subdomain of atriveo.com, adjust accordingly.
-
-## Developer docs (docs.cortex.bio)
-
-Deploy the docs proxy worker:
+Verify:
 
 ```bash
-cd cortex-bio/infra/cloudflare/docs-proxy
-npm install
-npx wrangler deploy
+dig api.atriveo.com +short
+curl https://api.atriveo.com/health
+fly certs check api.atriveo.com --app cortex-bio-api
 ```
 
-Then add custom domain in Workers → Triggers:
+---
 
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
-| CNAME | `docs.cortex` | `cortex-bio-docs.<account>.workers.dev` | Proxied |
+## Docs (`docs.atriveo.com`)
 
-Or attach `docs.cortex.bio` directly as a Worker custom domain in the dashboard.
+Deploy worker: `cd infra/cloudflare/docs-proxy && npx wrangler deploy --domain docs.atriveo.com`
 
-### What docs.cortex.bio serves
+Or attach custom domain in Workers → **cortex-bio-docs** → Triggers.
 
-| Path | Proxies to |
-|------|------------|
-| `/` | Redirect → `/docs` |
-| `/docs` | `api.cortex.bio/docs` (Swagger UI) |
-| `/openapi.json` | `api.cortex.bio/openapi.json` |
-| `/playground` | `api.cortex.bio/playground` |
+---
 
-## Status page (status.cortex.bio)
+## Status (`status.atriveo.com`)
 
-Deploy the status worker:
+Deploy worker: `cd infra/cloudflare/status-proxy && npx wrangler deploy --domain status.atriveo.com`
 
-```bash
-cd cortex-bio/infra/cloudflare/status-proxy
-npm install
-npx wrangler deploy
-```
-
-Then attach custom domain in Workers → Triggers:
-
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
-| CNAME | `status` | `cortex-bio-status.<account>.workers.dev` | Proxied |
-
-Or add `status.cortex.bio` directly as a Worker custom domain in the dashboard.
-
-## SSL
-
-Cloudflare Universal SSL covers `*.atriveo.com` and custom hostnames once validated.
+---
 
 ## Verify
 
 ```bash
-curl -sI https://bio.atriveo.com | head -5
-curl -sI https://docs.cortex.bio/docs | head -5
-curl -s https://api.cortex.bio/health
-curl -sI https://status.cortex.bio | head -5
+curl -sI https://bio.atriveo.com | head -3
+curl -s https://api.atriveo.com/health
+curl -sI https://docs.atriveo.com/docs | head -3
+curl -sI https://status.atriveo.com | head -3
 ```
