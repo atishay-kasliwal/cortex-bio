@@ -83,7 +83,7 @@ FEATURE_ORGANIZATIONS=false
 
 | Variable | Value |
 |----------|-------|
-| `NODE_VERSION` | `20` |
+| `NODE_VERSION` | `22` |
 | `VITE_API_URL` | `https://api.cortex.bio` |
 | `VITE_DOCS_API_URL` | `https://api.cortex.bio` |
 | `VITE_SUPABASE_URL` | from Supabase |

@@ -20,7 +20,7 @@ This error means **no DNS record exists** for `bio.atriveo.com`. The app cannot 
 
 | Variable | Value |
 |----------|-------|
-| `NODE_VERSION` | `20` |
+| `NODE_VERSION` | `22` |
 | `VITE_API_URL` | `https://api.cortex.bio` |
 | `VITE_DOCS_API_URL` | `https://api.cortex.bio` |
 | `VITE_SUPABASE_URL` | Your Supabase project URL |
