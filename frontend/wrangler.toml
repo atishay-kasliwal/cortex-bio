@@ -1,8 +1,6 @@
-/*
-  Cloudflare Pages — Atriveo Bio
-  https://bio.atriveo.com (production)
-  https://preview.bio.atriveo.com (preview)
-*/
+# Cloudflare Pages — Atriveo Bio
+# https://bio.atriveo.com (production)
+# https://preview.bio.atriveo.com (preview)
 name = "atriveo-bio"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = ".output/public"
