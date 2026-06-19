@@ -8,7 +8,7 @@ export const cloudflarePagesConfig = {
   rootDirectory: "cortex-bio/frontend",
   buildCommand: "npm ci && npm run build",
   outputDirectory: ".output/public",
-  nodeVersion: "20",
+  nodeVersion: "22",
   productionDomains: ["bio.atriveo.com"],
   previewDomains: ["preview.bio.atriveo.com"],
   environment: {

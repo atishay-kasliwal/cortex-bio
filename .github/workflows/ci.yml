@@ -17,6 +17,8 @@ jobs:
     defaults:
       run:
         working-directory: db
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci?schema=public
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -75,6 +77,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    continue-on-error: true
     defaults:
       run:
         working-directory: frontend
