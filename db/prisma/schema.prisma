@@ -1,0 +1,491 @@
+// Cortex Bio v1 — Neon PostgreSQL schema
+// Raw layer: append-only health_samples
+// Feature layer: daily_features, hourly_features
+// Insights layer: predictions, insights
+// Future layer: work_sessions
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SessionQuality {
+  poor
+  average
+  good
+  great
+}
+
+enum InsightType {
+  top_driver
+  peak_hour
+  crash_window
+  chronotype
+  sleep_impact
+  hrv_impact
+  activity_impact
+  trend
+}
+
+model User {
+  id                      String    @id @default(uuid()) @db.Uuid
+  email                   String    @unique
+  supabaseUserId          String?   @unique @map("supabase_user_id") @db.Uuid
+  fullName                String?   @map("full_name")
+  timezone                String    @default("America/Los_Angeles")
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  onboardingCompletedAt   DateTime? @map("onboarding_completed_at") @db.Timestamptz(6)
+  chronotypeEstimate      String?   @map("chronotype_estimate")
+
+  healthSamples  HealthSample[]
+  sleepSessions  SleepSession[]
+  workouts       Workout[]
+  dailyFeatures  DailyFeature[]
+  hourlyFeatures HourlyFeature[]
+  dailyLabels    DailyLabel[]
+  workSessions   WorkSession[]
+  predictions    Prediction[]
+  insights       Insight[]
+  cognitiveWindows CognitiveWindow[]
+  cortexDailyMetrics CortexDailyMetric[]
+  modelRuns      ModelRun[]
+  performancePredictions PerformancePrediction[]
+  predictionValidations PredictionValidation[]
+  validationMetrics ValidationMetric[]
+  apiKeys        ApiKey[]
+  providerConnections ProviderConnection[]
+  organizationMembers OrganizationMember[]
+
+  @@map("users")
+}
+
+/// Append-only raw Apple Health samples. Never update — only insert.
+model HealthSample {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  metricType    String    @map("metric_type")
+  metricSubtype String?   @map("metric_subtype")
+  value         Float
+  unit          String?
+  startTime     DateTime  @map("start_time") @db.Timestamptz(6)
+  endTime       DateTime? @map("end_time") @db.Timestamptz(6)
+  sourceDevice  String?   @map("source_device")
+  sourceApp     String?   @map("source_app")
+  metadata      Json      @default("{}")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([metricType])
+  @@index([startTime(sort: Desc)])
+  @@index([userId, metricType, startTime(sort: Desc)])
+  @@map("health_samples")
+}
+
+model SleepSession {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  sleepStart      DateTime @map("sleep_start") @db.Timestamptz(6)
+  sleepEnd        DateTime @map("sleep_end") @db.Timestamptz(6)
+  durationMinutes Float    @map("duration_minutes")
+  remMinutes      Float    @default(0) @map("rem_minutes")
+  deepMinutes     Float    @default(0) @map("deep_minutes")
+  coreMinutes     Float    @default(0) @map("core_minutes")
+  awakeMinutes    Float    @default(0) @map("awake_minutes")
+  sleepEfficiency Float?   @map("sleep_efficiency")
+  sourceDevice    String?  @map("source_device")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sleepStart, sleepEnd])
+  @@index([userId])
+  @@index([sleepStart(sort: Desc)])
+  @@map("sleep_sessions")
+}
+
+model Workout {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  workoutType     String   @map("workout_type")
+  startTime       DateTime @map("start_time") @db.Timestamptz(6)
+  endTime         DateTime @map("end_time") @db.Timestamptz(6)
+  durationMinutes Float    @map("duration_minutes")
+  calories        Float?
+  avgHeartRate    Float?   @map("avg_heart_rate")
+  maxHeartRate    Float?   @map("max_heart_rate")
+  sourceDevice    String?  @map("source_device")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([workoutType])
+  @@index([startTime(sort: Desc)])
+  @@map("workouts")
+}
+
+model DailyFeature {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @map("user_id") @db.Uuid
+  date              DateTime @db.Date
+  sleepDuration     Float?   @map("sleep_duration")
+  sleepEfficiency   Float?   @map("sleep_efficiency")
+  sleepDebtHours    Float?   @map("sleep_debt_hours")
+  avgHrv            Float?   @map("avg_hrv")
+  hrvVsBaselinePct  Float?   @map("hrv_vs_baseline_pct")
+  restingHr         Float?   @map("resting_hr")
+  steps             Float?
+  exerciseMinutes   Float?   @map("exercise_minutes")
+  activeCalories    Float?   @map("active_calories")
+  readinessScore    Float?   @map("readiness_score")
+  checkinCount      Int      @default(0) @map("checkin_count")
+  featureConfidence Float?   @map("feature_confidence")
+  computedAt        DateTime @default(now()) @map("computed_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date(sort: Desc)])
+  @@map("daily_features")
+}
+
+model HourlyFeature {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  timestampHour  DateTime @map("timestamp_hour") @db.Timestamptz(6)
+  avgHeartRate   Float?   @map("avg_heart_rate")
+  avgHrv         Float?   @map("avg_hrv")
+  steps          Float?
+  activityScore  Float?   @map("activity_score")
+  computedAt     DateTime @default(now()) @map("computed_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, timestampHour])
+  @@index([userId, timestampHour(sort: Desc)])
+  @@map("hourly_features")
+}
+
+/// Ground truth: one subjective rating set per calendar day.
+model DailyLabel {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @map("user_id") @db.Uuid
+  date              DateTime @db.Date
+  productivityScore Int      @map("productivity_score")
+  energyScore       Int      @map("energy_score")
+  focusScore        Int      @map("focus_score")
+  moodScore         Int      @map("mood_score")
+  notes             String?
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date(sort: Desc)])
+  @@map("daily_labels")
+}
+
+/// Work session labels for ground truth collection.
+model WorkSession {
+  id             String          @id @default(uuid()) @db.Uuid
+  userId         String          @map("user_id") @db.Uuid
+  startedAt      DateTime        @map("started_at") @db.Timestamptz(6)
+  endedAt        DateTime?       @map("ended_at") @db.Timestamptz(6)
+  sessionQuality SessionQuality? @map("session_quality")
+  projectName    String?         @map("project_name")
+  durationMinutes Float?         @map("duration_minutes")
+  notes          String?
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([startedAt(sort: Desc)])
+  @@map("work_sessions")
+}
+
+model Prediction {
+  id                   String    @id @default(uuid()) @db.Uuid
+  userId               String    @map("user_id") @db.Uuid
+  predictionDate       DateTime  @map("prediction_date") @db.Date
+  readinessScore       Float     @map("readiness_score")
+  peakWindowStart      DateTime? @map("peak_window_start") @db.Timestamptz(6)
+  peakWindowEnd        DateTime? @map("peak_window_end") @db.Timestamptz(6)
+  secondaryWindowStart DateTime? @map("secondary_window_start") @db.Timestamptz(6)
+  secondaryWindowEnd   DateTime? @map("secondary_window_end") @db.Timestamptz(6)
+  crashWindowStart     DateTime? @map("crash_window_start") @db.Timestamptz(6)
+  crashWindowEnd       DateTime? @map("crash_window_end") @db.Timestamptz(6)
+  confidence           Float?
+  modelVersion         String    @map("model_version")
+  actualScore          Float?    @map("actual_score")
+  predictionError      Float?    @map("prediction_error")
+  featureSnapshot      Json      @default("{}") @map("feature_snapshot")
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([predictionDate(sort: Desc)])
+  @@index([userId, predictionDate(sort: Desc)])
+  @@map("predictions")
+}
+
+model Insight {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String      @map("user_id") @db.Uuid
+  insightType InsightType @map("insight_type")
+  title       String
+  description String?
+  metricName  String?     @map("metric_name")
+  impactPct   Float?      @map("impact_pct")
+  confidence  Float?
+  validFrom   DateTime    @map("valid_from") @db.Date
+  validTo     DateTime?   @map("valid_to") @db.Date
+  metadata    Json        @default("{}")
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([insightType])
+  @@index([userId, insightType, validFrom(sort: Desc)])
+  @@map("insights")
+}
+
+/// Phase 4: Discovered cognitive performance windows per day.
+model CognitiveWindow {
+  id                   String    @id @default(uuid()) @db.Uuid
+  userId               String    @map("user_id") @db.Uuid
+  date                 DateTime  @db.Date
+  peakWindowStart      DateTime? @map("peak_window_start") @db.Timestamptz(6)
+  peakWindowEnd        DateTime? @map("peak_window_end") @db.Timestamptz(6)
+  secondaryWindowStart DateTime? @map("secondary_window_start") @db.Timestamptz(6)
+  secondaryWindowEnd   DateTime? @map("secondary_window_end") @db.Timestamptz(6)
+  crashWindowStart     DateTime? @map("crash_window_start") @db.Timestamptz(6)
+  crashWindowEnd       DateTime? @map("crash_window_end") @db.Timestamptz(6)
+  meetingWindowStart   DateTime? @map("meeting_window_start") @db.Timestamptz(6)
+  meetingWindowEnd     DateTime? @map("meeting_window_end") @db.Timestamptz(6)
+  recoveryWindowStart  DateTime? @map("recovery_window_start") @db.Timestamptz(6)
+  recoveryWindowEnd    DateTime? @map("recovery_window_end") @db.Timestamptz(6)
+  hourlyCurve          Json      @default("[]") @map("hourly_curve")
+  confidence           Float?
+  version              String    @default("windows-v1")
+  computedAt           DateTime  @default(now()) @map("computed_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date(sort: Desc)])
+  @@map("cognitive_windows")
+}
+
+/// Phase 5: Atriveo Cortex daily work telemetry.
+model CortexDailyMetric {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  date             DateTime @db.Date
+  deepWorkMinutes  Float?   @map("deep_work_minutes")
+  attentionScore   Float?   @map("attention_score")
+  contextSwitches  Int?     @map("context_switches")
+  codingMinutes    Float?   @map("coding_minutes")
+  writingMinutes   Float?   @map("writing_minutes")
+  researchMinutes  Float?   @map("research_minutes")
+  meetingMinutes   Float?   @map("meeting_minutes")
+  outputScore      Float?   @map("output_score")
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@index([date(sort: Desc)])
+  @@map("cortex_daily_metrics")
+}
+
+/// Phase 7: ML training run audit trail.
+model ModelRun {
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @map("user_id") @db.Uuid
+  modelVersion        String   @map("model_version")
+  trainingStart       DateTime @map("training_start") @db.Date
+  trainingEnd         DateTime @map("training_end") @db.Date
+  status              String   @default("completed")
+  mae                 Json     @default("{}")
+  rmse                Json     @default("{}")
+  featureImportance   Json     @default("{}") @map("feature_importance")
+  baselineComparison  Json     @default("{}") @map("baseline_comparison")
+  beatsBaselines      Boolean  @default(false) @map("beats_baselines")
+  sampleCount         Int      @default(0) @map("sample_count")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("model_runs")
+}
+
+/// Phase 7: Work performance predictions (Cortex targets).
+model PerformancePrediction {
+  id                       String   @id @default(uuid()) @db.Uuid
+  userId                   String   @map("user_id") @db.Uuid
+  predictionDate           DateTime @map("prediction_date") @db.Date
+  predictedAttention       Float?   @map("predicted_attention")
+  predictedDeepWorkMinutes Float?   @map("predicted_deep_work_minutes")
+  predictedOutputScore     Float?   @map("predicted_output_score")
+  confidence               Float?
+  modelVersion             String   @map("model_version")
+  featureSnapshot          Json     @default("{}") @map("feature_snapshot")
+  actualAttention          Float?   @map("actual_attention")
+  actualDeepWorkMinutes    Float?   @map("actual_deep_work_minutes")
+  actualOutputScore        Float?   @map("actual_output_score")
+  createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, predictionDate, modelVersion])
+  @@index([userId, predictionDate(sort: Desc)])
+  @@map("performance_predictions")
+}
+
+/// Phase 9: Per-prediction outcome comparison.
+model PredictionValidation {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  modelVersion    String   @map("model_version")
+  predictionDate  DateTime @map("prediction_date") @db.Date
+  targetType      String   @map("target_type")
+  predictedValue  Float    @map("predicted_value")
+  actualValue     Float    @map("actual_value")
+  absoluteError   Float    @map("absolute_error")
+  percentageError Float?   @map("percentage_error")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, modelVersion, predictionDate, targetType])
+  @@index([userId, predictionDate(sort: Desc)])
+  @@index([userId, targetType, predictionDate(sort: Desc)])
+  @@map("prediction_validations")
+}
+
+/// Phase 9: Aggregated validation metrics over a date range.
+model ValidationMetric {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  modelVersion    String   @map("model_version")
+  targetType      String   @map("target_type")
+  dateRangeStart  DateTime @map("date_range_start") @db.Date
+  dateRangeEnd    DateTime @map("date_range_end") @db.Date
+  mae             Float
+  rmse            Float
+  correlation     Float?
+  beatsBaselines  Boolean  @default(false) @map("beats_baselines")
+  baselineMae     Json     @default("{}") @map("baseline_mae")
+  sampleCount     Int      @default(0) @map("sample_count")
+  computedAt      DateTime @default(now()) @map("computed_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, modelVersion, targetType, dateRangeStart, dateRangeEnd])
+  @@index([userId, computedAt(sort: Desc)])
+  @@map("validation_metrics")
+}
+
+/// Phase 10: API keys for Wearable Intelligence API (/v1).
+model ApiKey {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  name       String
+  keyPrefix  String    @map("key_prefix")
+  keyHash    String    @map("key_hash")
+  tier       String    @default("free")
+  rateLimit  Int       @default(60) @map("rate_limit")
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(6)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apiRequests  ApiRequest[]
+
+  @@unique([keyPrefix, keyHash])
+  @@index([keyPrefix])
+  @@index([userId])
+  @@map("api_keys")
+}
+
+/// Usage analytics for public API (/v1).
+model ApiRequest {
+  id        String   @id @default(uuid()) @db.Uuid
+  apiKeyId  String?  @map("api_key_id") @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  method    String
+  endpoint  String
+  status    Int
+  latencyMs Int      @map("latency_ms")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  apiKey ApiKey? @relation(fields: [apiKeyId], references: [id], onDelete: SetNull)
+
+  @@index([apiKeyId, createdAt(sort: Desc)])
+  @@index([endpoint, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("api_requests")
+}
+
+/// Wearable provider connections (wearable-agnostic platform layer).
+model ProviderConnection {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  provider    String
+  status      String    @default("disconnected")
+  connectedAt DateTime? @map("connected_at") @db.Timestamptz(6)
+  lastSyncAt  DateTime? @map("last_sync_at") @db.Timestamptz(6)
+  metadata    Json      @default("{}")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@index([userId])
+  @@map("provider_connections")
+}
+
+/// B2B organizations (feature-flagged: FEATURE_ORGANIZATIONS).
+model Organization {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  members OrganizationMember[]
+
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  role           String   @default("member")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@map("organization_members")
+}

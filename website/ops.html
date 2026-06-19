@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cortex Bio — Adoption Metrics</title>
+  <style>
+    :root { --bg:#09090b; --panel:#18181b; --border:#27272a; --text:#fafafa; --muted:#a1a1aa; --accent:#3b82f6; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); padding:1.5rem; }
+    h1 { font-size:1.25rem; margin:0 0 0.25rem; }
+    p.sub { color:var(--muted); font-size:0.875rem; margin:0 0 1.5rem; }
+    .row { display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+    input { padding:0.55rem 0.75rem; border-radius:8px; border:1px solid var(--border); background:var(--panel); color:var(--text); min-width:200px; }
+    button { padding:0.55rem 1rem; border-radius:8px; border:none; background:var(--accent); color:white; font-weight:600; cursor:pointer; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+    .stat { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1rem; }
+    .stat label { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+    .stat .val { font-size:1.75rem; font-weight:700; margin-top:0.25rem; }
+    table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    th,td { text-align:left; padding:0.5rem; border-bottom:1px solid var(--border); }
+    th { color:var(--muted); font-weight:500; }
+    pre { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1rem; overflow:auto; font-size:0.75rem; }
+    a { color:var(--accent); }
+  </style>
+</head>
+<body>
+  <h1>Adoption dashboard</h1>
+  <p class="sub">Internal ops · <a href="/">← Back to site</a></p>
+  <div class="row">
+    <input id="base" placeholder="API base URL" />
+    <input id="token" type="password" placeholder="ADMIN_SECRET" />
+    <button id="load">Load metrics</button>
+  </div>
+  <div class="grid" id="stats"></div>
+  <h2 style="font-size:1rem;margin:1.5rem 0 0.75rem;">Top endpoints</h2>
+  <table><thead><tr><th>Endpoint</th><th>Calls</th></tr></thead><tbody id="endpoints"></tbody></table>
+  <h2 style="font-size:1rem;margin:1.5rem 0 0.75rem;">Raw JSON</h2>
+  <pre id="raw">Set ADMIN_SECRET on the API and paste it above.</pre>
+  <script>
+    base.value = location.origin;
+    load.onclick = async () => {
+      const url = base.value.replace(/\/$/, '') + '/api/admin/metrics?days=30';
+      const res = await fetch(url, { headers: { 'X-Admin-Token': token.value } });
+      const data = await res.json();
+      raw.textContent = JSON.stringify(data, null, 2);
+      if (!res.ok) return;
+      const s = data.product_signals;
+      stats.innerHTML = [
+        ['API keys', data.api_keys.total],
+        ['Active (7d)', data.api_keys.active_last_7d],
+        ['Requests (30d)', data.requests.total],
+        ['Readiness calls', s.readiness_calls],
+        ['Forecast calls', s.forecast_calls],
+        ['Windows calls', s.windows_calls],
+        ['Prediction calls', s.prediction_calls],
+      ].map(([l,v]) => `<div class="stat"><label>${l}</label><div class="val">${v}</div></div>`).join('');
+      endpoints.innerHTML = (s.top_endpoints || []).map(e =>
+        `<tr><td><code>${e.endpoint}</code></td><td>${e.count}</td></tr>`).join('');
+    };
+  </script>
+</body>
+</html>

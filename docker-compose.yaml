@@ -1,0 +1,13 @@
+services:
+  cortex-api:
+    container_name: cortex-api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: 8000
+      DEFAULT_USER_EMAIL: ${DEFAULT_USER_EMAIL:-founder@cortex.bio}
+    restart: unless-stopped

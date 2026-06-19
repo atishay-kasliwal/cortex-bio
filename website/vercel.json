@@ -1,0 +1,10 @@
+{
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "framework": null,
+  "rewrites": [
+    { "source": "/docs", "destination": "https://api.cortex.bio/docs" },
+    { "source": "/playground", "destination": "https://api.cortex.bio/playground" },
+    { "source": "/openapi.json", "destination": "https://api.cortex.bio/openapi.json" }
+  ]
+}

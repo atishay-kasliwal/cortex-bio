@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest an improvement to the open-source engine
+title: "[feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cortex Bio is a **wearable intelligence platform**, not a productivity app.
+        Feature requests should strengthen the OSS engine layer.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What are you trying to accomplish?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Layer
+      options:
+        - Wearable ingest / providers
+        - Feature store
+        - Readiness / chronotype
+        - Cognitive windows / forecast
+        - API / SDK
+        - Research / datasets
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This fits the open-source engine (MIT), not proprietary Cortex integration
+          required: true

@@ -1,0 +1,29 @@
+{
+  "name": "@cortexbio/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for the Cortex Bio Wearable Intelligence API",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["cortex-bio", "wearable", "healthkit", "readiness", "chronotype"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atriveo/cortex-bio",
+    "directory": "sdk/typescript"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

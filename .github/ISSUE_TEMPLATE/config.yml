@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: API documentation
+    url: https://api.cortex.bio/docs
+    about: OpenAPI reference and endpoint explorer
+  - name: Security report
+    url: https://github.com/atriveo/cortex-bio/security/policy
+    about: Report a vulnerability privately

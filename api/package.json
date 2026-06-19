@@ -1,0 +1,28 @@
+{
+  "name": "@cortex-bio/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "keys:create": "tsx scripts/create-api-key.ts",
+    "audit:isolation": "tsx scripts/isolation-audit.ts"
+  },
+  "dependencies": {
+    "@cortex-bio/db": "file:../db",
+    "@hono/node-server": "^1.13.7",
+    "dotenv": "^16.4.7",
+    "hono": "^4.6.14",
+    "jose": "^6.2.3",
+    "luxon": "^3.5.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

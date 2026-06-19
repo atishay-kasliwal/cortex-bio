@@ -1,0 +1,56 @@
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+!**/.env.example
+api/.env
+db/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+.dev.vars
+
+# Dependencies & build output
+node_modules/
+dist/
+.output/
+.vinxi/
+.tanstack/
+.nitro/
+.next/
+dashboard/.next/
+*.egg-info/
+.venv/
+venv/
+
+# Prisma
+db/prisma/*.db
+db/prisma/*.db-journal
+
+# Python / ML caches
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Cloudflare
+.wrangler/
+
+# macOS / editor
+.DS_Store
+._*
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# iOS local
+ios/**/xcuserdata/
+ios/**/*.xcworkspace/xcuserdata/
+
+# Export archives (source is in frontend/)
+Atriveo Bio.zip
+
+# Logs
+*.log
+npm-debug.log*

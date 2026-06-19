@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cortex Bio — API Playground</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #18181b;
+      --border: #27272a;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --accent: #3b82f6;
+      --green: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    header h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+    header p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.875rem; }
+    header a { color: var(--accent); text-decoration: none; font-size: 0.875rem; }
+    main {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 80px);
+    }
+    @media (max-width: 768px) { main { grid-template-columns: 1fr; } }
+    aside {
+      border-right: 1px solid var(--border);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label { font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
+    input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+    .endpoints { display: flex; flex-direction: column; gap: 0.35rem; }
+    button.endpoint {
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: ui-monospace, monospace;
+    }
+    button.endpoint:hover { border-color: var(--accent); }
+    button.endpoint.active { border-color: var(--accent); background: #1e3a5f; }
+    section {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .meta span.status-ok { color: var(--green); }
+    pre {
+      flex: 1;
+      margin: 0;
+      padding: 1rem;
+      border-radius: 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      overflow: auto;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      min-height: 320px;
+    }
+    .run {
+      align-self: flex-start;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .run:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Cortex Bio API Playground</h1>
+      <p>Test wearable intelligence endpoints without writing code.</p>
+    </div>
+    <div>
+      <a href="/docs">OpenAPI docs</a>
+      ·
+      <a href="https://github.com/atriveo/cortex-bio" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+  <main>
+    <aside>
+      <div>
+        <label for="baseUrl">API base URL</label>
+        <input id="baseUrl" value="" placeholder="http://localhost:8000" />
+      </div>
+      <div>
+        <label for="apiKey">API key</label>
+        <input id="apiKey" type="password" placeholder="cb_test_..." />
+      </div>
+      <div class="endpoints" id="endpoints"></div>
+    </aside>
+    <section>
+      <div class="meta">
+        <span id="method">GET</span>
+        <span id="path">/v1/readiness/today</span>
+        <span id="latency"></span>
+        <span id="status"></span>
+      </div>
+      <button class="run" id="runBtn">Send request</button>
+      <pre id="output">Paste your API key and select an endpoint.</pre>
+    </section>
+  </main>
+  <script>
+    const ENDPOINTS = [
+      { label: 'Readiness today', path: '/v1/readiness/today' },
+      { label: 'Readiness history', path: '/v1/readiness/history?days=14' },
+      { label: 'Baselines', path: '/v1/baselines' },
+      { label: 'Chronotype', path: '/v1/chronotype' },
+      { label: 'Windows today', path: '/v1/windows/today' },
+      { label: 'Windows week', path: '/v1/windows/week' },
+      { label: 'Forecast', path: '/v1/forecast' },
+      { label: 'Insights', path: '/v1/insights' },
+      { label: 'Correlations', path: '/v1/correlations' },
+      { label: 'Trends', path: '/v1/trends?days=14' },
+      { label: 'Predictions tomorrow', path: '/v1/predictions/tomorrow' },
+      { label: 'Model status', path: '/v1/models/status' },
+    ];
+
+    const baseUrlInput = document.getElementById('baseUrl');
+    const apiKeyInput = document.getElementById('apiKey');
+    const endpointsEl = document.getElementById('endpoints');
+    const output = document.getElementById('output');
+    const pathEl = document.getElementById('path');
+    const latencyEl = document.getElementById('latency');
+    const statusEl = document.getElementById('status');
+    const runBtn = document.getElementById('runBtn');
+
+    baseUrlInput.value = window.location.origin;
+
+    let selected = ENDPOINTS[0].path;
+
+    ENDPOINTS.forEach((ep) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'endpoint' + (ep.path === selected ? ' active' : '');
+      btn.textContent = ep.label;
+      btn.onclick = () => {
+        selected = ep.path;
+        pathEl.textContent = ep.path;
+        document.querySelectorAll('.endpoint').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+      };
+      endpointsEl.appendChild(btn);
+    });
+
+    pathEl.textContent = selected;
+
+    async function run() {
+      const base = baseUrlInput.value.replace(/\/$/, '');
+      const key = apiKeyInput.value.trim();
+      if (!key) {
+        output.textContent = 'Error: API key required';
+        return;
+      }
+      runBtn.disabled = true;
+      output.textContent = 'Loading...';
+      latencyEl.textContent = '';
+      statusEl.textContent = '';
+      const start = performance.now();
+      try {
+        const res = await fetch(base + selected, {
+          headers: { Authorization: 'Bearer ' + key, Accept: 'application/json' },
+        });
+        const ms = Math.round(performance.now() - start);
+        const text = await res.text();
+        latencyEl.textContent = ms + ' ms';
+        statusEl.textContent = 'HTTP ' + res.status;
+        statusEl.className = res.ok ? 'status-ok' : '';
+        try {
+          output.textContent = JSON.stringify(JSON.parse(text), null, 2);
+        } catch {
+          output.textContent = text;
+        }
+      } catch (err) {
+        output.textContent = 'Error: ' + err.message;
+      } finally {
+        runBtn.disabled = false;
+      }
+    }
+
+    runBtn.onclick = run;
+    apiKeyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
+  </script>
+</body>
+</html>
